@@ -34,6 +34,8 @@ add_executable(Mase_Cinema_Project
         src/qt/movieswindow.cpp
         src/qt/userprofilewindow.cpp
         src/qt/moviewidget.cpp
+        src/qt/libraries/Classes/movie/movies.cpp
+        src/qt/libraries/Classes/users/user_and_dev.cpp
 )
 
 # Ensure the include directories are available

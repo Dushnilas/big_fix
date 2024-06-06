@@ -8,7 +8,6 @@
 #include "../backend/libraries/mysql-queries/mysql-queries.h"
 #include "backend.h"
 
-
 FilmType strToType(const std::string& type){
     if (type == "Movie") return FilmType::Movie;
     else if (type == "TvMovie") return FilmType::Movie;
@@ -17,8 +16,7 @@ FilmType strToType(const std::string& type){
     return FilmType::Default;
 }
 
-
-void loadMovies(std::vector<std::shared_ptr<Movie>> &all_movies) {
+void loadMovies(std::vector<QSharedPointer<Movie>> &all_movies) {
     // Load all genres in map {tconst: [genre1, genre2, ...]}
     std::map<std::string, std::vector<std::string>> genres;
     std::string query = "SELECT top_movies.tconst, g.genre_name FROM (SELECT t.tconst FROM titles t JOIN ratings r ON "
@@ -37,10 +35,10 @@ void loadMovies(std::vector<std::shared_ptr<Movie>> &all_movies) {
 
     int counter = 0;
     for (auto el: buf){
-        auto movie = std::make_shared<Movie>(el["title_name"], el["tconst"],  el["description"],
-            el["image_url"], strToType(el["title_type"]), std::stoi(el["year_start"]),
-            std::stoi(el["year_end"]), std::stoi(el["is_adult"]),
-            std::stod(el["rating"]), std::stoi(el["num_votes"]));
+        auto movie = QSharedPointer<Movie>::create(el["title_name"], el["tconst"],  el["description"],
+                                                   el["image_url"], strToType(el["title_type"]), std::stoi(el["year_start"]),
+                                                   std::stoi(el["year_end"]), std::stoi(el["is_adult"]),
+                                                   std::stod(el["rating"]), std::stoi(el["num_votes"]));
         all_movies.push_back(movie);
         movie->setGenre(genres[el["tconst"]]);
         counter++;
@@ -49,10 +47,16 @@ void loadMovies(std::vector<std::shared_ptr<Movie>> &all_movies) {
     Logger::getInstance().logInfo(std::to_string(counter) + " movies was uploaded.");
 }
 
-std::vector<std::shared_ptr<Movie>> getMoviesSorted(std::vector<std::shared_ptr<Movie>> &mmovies_all, int n, const std::string& genre, const FilmType filmType,
-                                                    const bool is_adult) {
+bool isLiked(){
+    std::string query = "SELECT COUNT(*) FROM user_ratings WHERE user_id = '" + main_user->getLogin() + "'";
+    std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
+    return std::stoi(buf[0]["COUNT(*)"]);
+}
 
-    std::vector<std::shared_ptr<Movie>> genreMovies;
+std::vector<QSharedPointer<Movie>> getMoviesSorted(std::vector<QSharedPointer<Movie>> &mmovies_all, int n, const std::string& genre, const FilmType filmType,
+                                                   const bool is_adult) {
+
+    std::vector<QSharedPointer<Movie>> genreMovies;
 
     if (!genre.empty()) {
         for (const auto &movie: mmovies_all) {
@@ -76,14 +80,14 @@ std::vector<std::shared_ptr<Movie>> getMoviesSorted(std::vector<std::shared_ptr<
         }
     }
 
-    std::sort(genreMovies.begin(), genreMovies.end(),[](const std::shared_ptr<Movie>& a, const std::shared_ptr<Movie>& b) {
+    std::sort(genreMovies.begin(), genreMovies.end(),[](const QSharedPointer<Movie>& a, const QSharedPointer<Movie>& b) {
         return a->getRating() > b->getRating(); });
 
     if (genreMovies.size() <= n) return genreMovies;
     return {genreMovies.begin(), genreMovies.begin() + n};
 }
 
-bool compareMovies(const std::shared_ptr<Movie>& m1, const std::shared_ptr<Movie>& m2, const std::string& query) {
+bool compareMovies(const QSharedPointer<Movie>& m1, const QSharedPointer<Movie>& m2, const std::string& query) {
     size_t pos1 = m1->getName().find(query);
     size_t pos2 = m2->getName().find(query);
 
@@ -91,15 +95,14 @@ bool compareMovies(const std::shared_ptr<Movie>& m1, const std::shared_ptr<Movie
     return m1->getName().length() < m2->getName().length();
 }
 
-void searchMovies(std::vector<std::shared_ptr<Movie>>& result, const std::string& query, int n) {
-
+void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string& query, int n) {
     for (const auto& movie : all_movies) {
         if (movie->getName().find(query) != std::string::npos) {
             result.push_back(movie);
         }
     }
 
-    std::sort(result.begin(), result.end(), [&](const std::shared_ptr<Movie>& m1, const std::shared_ptr<Movie>& m2) {
+    std::sort(result.begin(), result.end(), [&](const QSharedPointer<Movie>& m1, const QSharedPointer<Movie>& m2) {
         return compareMovies(m1, m2, query); });
 
     if (n < result.size()) {
@@ -107,13 +110,12 @@ void searchMovies(std::vector<std::shared_ptr<Movie>>& result, const std::string
     }
 }
 
-
 bool SignIn(const std::string &login, const std::string &password) {
     std::string query = "SELECT a.user_id, a.pass, u.name, u.age, u.photo_url FROM auth a JOIN user_profile u ON u.user_id = a.user_id;";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
     for (const auto& el : buf) {
         if (login == el.at("user_id") && password == el.at("pass")) {
-            main_user = std::make_shared<User>(el.at("name"), login, password, std::stoi(el.at("age")), el.at("photo_url"));
+            main_user = QSharedPointer<User>::create(el.at("name"), login, password, std::stoi(el.at("age")), el.at("photo_url"));
             main_user->loadCol();
             Logger::getInstance().logError("User " + login + " signed in.");
             return true;
@@ -125,7 +127,7 @@ bool SignIn(const std::string &login, const std::string &password) {
 }
 
 bool SignUp(const std::string& login, const std::string& password){
-    std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", "SELECT * FROM auth;");;
+    std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", "SELECT * FROM auth;");
 
     if (std::find_if(buf.begin(), buf.end(), [&](const auto& c) {
         return login == c.at("user_id"); }) == buf.end()) {
@@ -140,7 +142,7 @@ bool SignUp(const std::string& login, const std::string& password){
             ExecuteInsertQuery("library", "insert", "auth", data2)){
 
             Logger::getInstance().logInfo("User " + login + " signed up.");
-            main_user = std::make_shared<User>(login, login, password, 0, "");
+            main_user = QSharedPointer<User>::create(login, login, password, 0, "");
             main_user->loadCol();
             return true;
         }
@@ -176,12 +178,12 @@ bool SignInFun(const std::string& login, const std::string& password) {
     return SignIn(login, password); // реализация
 }
 
-bool aboba(const std::shared_ptr<Movie>& m, const std::string& query) {
+bool aboba(const QSharedPointer<Movie>& m, const std::string& query) {
     return m->getTconst() == query;
 }
 
-void getRecommendation(const std::vector<std::shared_ptr<Movie>>& AllMovies, std::vector<std::shared_ptr<Movie>>& buf,
-    const std::vector<std::string> tconsts) {
+void getRecommendation(const std::vector<QSharedPointer<Movie>>& AllMovies, std::vector<QSharedPointer<Movie>>& buf,
+    const std::vector<std::string>& tconsts) {
 
     for (auto el: tconsts) {
         auto it = std::find_if(AllMovies.begin(), AllMovies.end(), [&](const auto& movie) {

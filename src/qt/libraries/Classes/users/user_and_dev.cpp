@@ -7,10 +7,9 @@
 #include "../logger/logger.h"
 #include "../../mysql-queries/mysql-queries.h"
 
-
 // Definition of AllUsers class methods
-AllUsers::AllUsers(std::string name, std::string login, std::string password, int age, std::string photo):
-        _name(std::move(name)), _login(std::move(login)), _password(std::move(password)), _age(age), _photo_url(std::move(photo)){
+AllUsers::AllUsers(std::string name, std::string login, std::string password, int age, std::string photo)
+        : _name(std::move(name)), _login(std::move(login)), _password(std::move(password)), _age(age), _photo_url(std::move(photo)) {
     Logger::getInstance().logInfo("User " + _login + " has logged in.");
 }
 
@@ -18,13 +17,11 @@ std::string AllUsers::getName() const {
     return _name;
 }
 
-void AllUsers::setName(const std::string& name){
+void AllUsers::setName(const std::string& name) {
     _name = name;
     ExecuteUpdateQuery("library", "UPDATE user_profile SET name = '" + _name + "' WHERE user_id = '" + _login + "';");
-
     Logger::getInstance().logInfo("User " + _login + " changed name.");
 }
-
 
 std::string AllUsers::getLogin() const {
     return _login;
@@ -34,30 +31,25 @@ std::string AllUsers::getPassword() const {
     return _password;
 }
 
-void AllUsers::setPassword(const std::string& pass){
+void AllUsers::setPassword(const std::string& pass) {
     _password = pass;
     ExecuteUpdateQuery("library", "UPDATE auth SET pass = '" + _password + "' WHERE user_id = '" + _login + "';");
-
     Logger::getInstance().logInfo("User " + _login + " changed password.");
 }
 
-
-int AllUsers::getAge() const{
+int AllUsers::getAge() const {
     return _age;
 }
 
-void AllUsers::setAge(int age){
+void AllUsers::setAge(int age) {
     _age = age;
     ExecuteUpdateQuery("library", "UPDATE user_profile SET age = '" + std::to_string(_age) + "' WHERE user_id = '" + _login + "';");
-
     Logger::getInstance().logInfo("User " + _login + " changed age.");
 }
-
 
 void AllUsers::setEmail(const std::string& email) {
     _email_address = email;
     ExecuteUpdateQuery("library", "UPDATE user_profile SET email = '" + _email_address + "' WHERE user_id = '" + _login + "';");
-
     Logger::getInstance().logInfo("User " + _login + " changed email.");
 }
 
@@ -68,7 +60,6 @@ std::string AllUsers::getEmail() const {
 void AllUsers::setPhoto(const std::string& photo) {
     _photo_url = photo;
     ExecuteUpdateQuery("library", "UPDATE user_profile SET photo_url = '" + _photo_url + "' WHERE user_id = '" + _login + "';");
-
     Logger::getInstance().logInfo("User " + _login + " changed photo.");
 }
 
@@ -80,7 +71,7 @@ Gender AllUsers::getGender() const {
     return _gender;
 }
 
-bool compareCol(const std::shared_ptr<Collection>& col1, const std::shared_ptr<Collection>& col2) {
+bool compareCol(const QSharedPointer<Collection>& col1, const QSharedPointer<Collection>& col2) {
     return col1.get() == col2.get();
 }
 
@@ -89,21 +80,21 @@ void AllUsers::loadCol() {
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
 
     int counter = 0;
-    for (auto el: buf){
-        auto col = std::make_shared<Collection>(std::stoi(el.at("collection_id")),
-                                                el.at("collection_name"));
+    for (auto el: buf) {
+        auto col = QSharedPointer<Collection>::create(std::stoi(el.at("collection_id")),
+                                                      el.at("collection_name"));
 
-        if (std::find_if(_all_collection.begin(), _all_collection.end(), [&col](const std::shared_ptr<Collection>& c) {
+        if (std::find_if(_all_collection.begin(), _all_collection.end(), [&col](const QSharedPointer<Collection>& c) {
             return compareCol(c, col); }) == _all_collection.end()) {
             _all_collection.push_back(col);
             counter++;
         }
     }
 
-    Logger::getInstance().logInfo(std::to_string(counter) + " collections was loaded.");
+    Logger::getInstance().logInfo(std::to_string(counter) + " collections were loaded.");
 }
 
-const std::vector<std::shared_ptr<Collection>>& AllUsers::getAllCol() const{
+const std::vector<QSharedPointer<Collection>>& AllUsers::getAllCol() const {
     return _all_collection;
 }
 
@@ -112,11 +103,10 @@ void AllUsers::clearCol() {
         col.reset();
     }
     _all_collection.clear();
-
-    Logger::getInstance().logInfo("All movies were removed from " + _name + ".");
+    Logger::getInstance().logInfo("All collections were removed from " + _name + ".");
 }
 
-bool AllUsers::removeCol(const std::shared_ptr<Collection>& collection) {
+bool AllUsers::removeCol(const QSharedPointer<Collection>& collection) {
     auto it = std::find(_all_collection.begin(), _all_collection.end(), collection);
     if (it != _all_collection.end()) {
         _all_collection.erase(it);
@@ -129,43 +119,44 @@ bool AllUsers::removeCol(const std::shared_ptr<Collection>& collection) {
 }
 
 void AllUsers::createCol(const std::string& name) {
-    for (const auto& el: _all_collection){
-        if (el->getName() == name){
+    for (const auto& el : _all_collection) {
+        if (el->getName() == name) {
             std::cout << "Collection with that name already exists" << '\n';
-            Logger::getInstance().logWarning("Can`t create collection with same name");
+            Logger::getInstance().logWarning("Can't create collection with the same name");
             return;
         }
     }
     int id = 0;
-    auto newCollection = std::make_shared<Collection>(id, name);
+    auto newCollection = QSharedPointer<Collection>::create(id, name);
     _all_collection.push_back(newCollection);
     Logger::getInstance().logInfo("Collection " + name + " was created by " + _name);
 }
 
-bool AllUsers::leaveComment(const std::shared_ptr<Movie>& movie, const std::string& com) {
+bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::string& com) {
     std::vector<std::map<std::string, std::string>> data = {
             {{"user_id", _login}, {"tconst", movie->getTconst()}, {"comment", com}}
     };
     if (ExecuteInsertQuery("library", "insert", "comments", data)) {
         movie->leaveComment(com);
-        Logger::getInstance().logInfo(_login + " left a comment to " + movie->getName() + ".");
+        Logger::getInstance().logInfo(_login + " left a comment on " + movie->getName() + ".");
         return true;
     }
 
-    Logger::getInstance().logInfo(_login + " couldn`t left a comment to " + movie->getName() + " for some error.");
+    Logger::getInstance().logInfo(_login + " couldn't leave a comment on " + movie->getName() + " due to some error.");
     return false;
 }
 
-void AllUsers::makeVote(const std::shared_ptr<Movie>& movie, int vote){
-    if (0 <= vote and vote <= 10){
+void AllUsers::makeVote(const QSharedPointer<Movie>& movie, int vote) {
+    if (0 <= vote && vote <= 10) {
         movie->updateRating(vote);
-        Logger::getInstance().logInfo("Movie (" + movie->getName() + ") rating update.");
+        Logger::getInstance().logInfo("Movie (" + movie->getName() + ") rating updated.");
+    } else {
+        Logger::getInstance().logError("New vote for " + movie->getName() + " isn't in the range of 0-10.");
     }
-    else Logger::getInstance().logError("New vote for " + movie->getName() + "isn`t from diapason of 0-10.");
 }
 
-User::User(std::string name, std::string login, std::string password, int age, std::string photo):
-        AllUsers(std::move(name), std::move(login), std::move(password), age, std::move(photo)) {}
+User::User(std::string name, std::string login, std::string password, int age, std::string photo)
+        : AllUsers(std::move(name), std::move(login), std::move(password), age, std::move(photo)) {}
 
-Developer::Developer(std::string name, std::string login, std::string password, int age, std::string photo):
-        AllUsers(std::move(name), std::move(login), std::move(password), age, std::move(photo)) {}
+Developer::Developer(std::string name, std::string login, std::string password, int age, std::string photo)
+        : AllUsers(std::move(name), std::move(login), std::move(password), age, std::move(photo)) {}

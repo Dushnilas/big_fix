@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-    initializePythonInterpreter("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries");
+    initializePythonInterpreter("/Users/senya/CLionProjects/big_fix/src/qt/libraries/mysql-queries");
 
 ////     ---------------- TEST OF DATABASE------------------
 ////     ---------------- INITIALIZING VARIABLES -------------
