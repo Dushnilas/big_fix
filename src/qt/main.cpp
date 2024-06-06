@@ -113,6 +113,8 @@ int main(int argc, char *argv[])
 
 //    ------------- QT PART -----------------
 
+    loadMovies(all_movies);
+
     QApplication a(argc, argv);
     MainWindow mainWindow;
     mainWindow.show();

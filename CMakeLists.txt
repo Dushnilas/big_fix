@@ -24,6 +24,7 @@ include_directories(src/qt/libraries/mysql-queries)
 include_directories(/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/include/python3.12)
 link_directories(/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib)
 
+
 # Add the executable for the Qt project
 add_executable(Mase_Cinema_Project
         src/qt/main.cpp
@@ -35,7 +36,9 @@ add_executable(Mase_Cinema_Project
         src/qt/userprofilewindow.cpp
         src/qt/moviewidget.cpp
         src/qt/libraries/Classes/movie/movies.cpp
+        src/qt/libraries/Classes/movie/movies.h
         src/qt/libraries/Classes/users/user_and_dev.cpp
+        src/qt/libraries/Classes/users/user_and_dev.h
 )
 
 # Ensure the include directories are available
