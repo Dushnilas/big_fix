@@ -1,1 +1,0 @@
-set(__QT_DEPLOY_TARGET_Mase_Cinema_Project_FILE /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/Mase_Cinema_Project)
