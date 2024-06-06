@@ -1,0 +1,167 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "src/qt/libraries/mysql-queries/libmysql-queries.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"src/qt/libraries/mysql-queries/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -fcolor-diagnostics"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/include/python3.12"
+				},
+				{
+					"backtrace" : 0,
+					"isSystem" : true,
+					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"id" : "mysql-queries_autogen_timestamp_deps::@6c8de004c5334fdf3d9f"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "mysql-queries_autogen::@6c8de004c5334fdf3d9f"
+		}
+	],
+	"id" : "mysql-queries::@6c8de004c5334fdf3d9f",
+	"name" : "mysql-queries",
+	"nameOnDisk" : "libmysql-queries.a",
+	"paths" : 
+	{
+		"build" : "src/qt/libraries/mysql-queries",
+		"source" : "src/qt/libraries/mysql-queries"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				2
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				3,
+				4
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				5
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/qt/libraries/mysql-queries/mysql-queries.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "src/qt/libraries/mysql-queries/mysql-queries.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "src/qt/libraries/mysql-queries/library.py",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/timestamp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/timestamp.rule",
+			"sourceGroupIndex" : 3
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

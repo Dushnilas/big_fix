@@ -1,0 +1,5 @@
+2024-06-04 23:55:53 [INFO]    100movies was uploaded.
+2024-06-05 12:16:52 [INFO]    10000 movies was uploaded.
+2024-06-05 13:52:39 [INFO]    10000 movies was uploaded.
+2024-06-05 13:53:05 [INFO]    10000 movies was uploaded.
+2024-06-05 13:53:06 [ERROR]   Wrong login or password

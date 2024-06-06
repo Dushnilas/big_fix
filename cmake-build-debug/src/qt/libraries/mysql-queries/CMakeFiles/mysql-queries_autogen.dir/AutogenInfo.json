@@ -1,0 +1,95 @@
+{
+	"BUILD_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries",
+	"CMAKE_EXECUTABLE" : "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries/CMakeLists.txt",
+		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCInformation.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-C.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-C.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-C.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang.cmake",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake"
+	],
+	"CMAKE_SOURCE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH",
+	"DEP_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "mysql-queries_autogen/timestamp",
+	"HEADERS" : 
+	[
+		[
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries/mysql-queries.h",
+			"MU",
+			"EWIEGA46WW/moc_mysql-queries.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/include",
+	"MOC_COMPILATION_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : [],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/include/python3.12",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1",
+		"/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include",
+		"/Library/Developer/CommandLineTools/usr/include"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT",
+		"Q_ENUM_NS"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/Library/Developer/CommandLineTools/usr/bin/c++",
+		"-std=gnu++17",
+		"-dM",
+		"-E",
+		"-c",
+		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/mysql-queries_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : [],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 8,
+	"PARSE_CACHE_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/CMakeFiles/mysql-queries_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/opt/homebrew/share/qt/libexec/moc",
+	"QT_UIC_EXECUTABLE" : "/opt/homebrew/share/qt/libexec/uic",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 7,
+	"SETTINGS_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/CMakeFiles/mysql-queries_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries/mysql-queries.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : [],
+	"UIC_UI_FILES" : [],
+	"VERBOSITY" : 0
+}

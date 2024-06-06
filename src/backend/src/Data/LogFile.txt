@@ -1,0 +1,20 @@
+2024-06-03 19:39:54 [INFO]    100movies was uploaded.
+2024-06-03 19:40:12 [INFO]    User PavelPopov has logged in.
+2024-06-03 19:40:12 [INFO]    Collection class object was created (Watch later).
+2024-06-03 19:40:12 [INFO]    Collection class object was created (Liked).
+2024-06-03 19:40:12 [INFO]    2collections was added to Pavel.
+2024-06-03 19:40:12 [ERROR]   User PavelPopov signed in.
+2024-06-03 20:06:30 [INFO]    Movie class object was created (Aboba).
+2024-06-03 20:06:30 [INFO]    Actor class object was created (Pupa).
+2024-06-03 20:06:30 [INFO]    Movie`s actor list was updated. Actor Pupa was added to Aboba.
+2024-06-03 20:06:30 [INFO]    Actor`s movies list was updated. Actor Pupa was added to Aboba.
+2024-06-03 20:06:30 [WARNING] Actor Pupa was already added.
+2024-06-03 20:06:30 [INFO]    User abobus233 has logged in.
+2024-06-03 20:06:30 [INFO]    Collection class object was created (Plusi Dla loxov).
+2024-06-03 20:06:44 [INFO]    Movie class object was created (Aboba).
+2024-06-03 20:06:44 [INFO]    Actor class object was created (Pupa).
+2024-06-03 20:06:44 [INFO]    Movie`s actor list was updated. Actor Pupa was added to Aboba.
+2024-06-03 20:06:44 [INFO]    Actor`s movies list was updated. Actor Pupa was added to Aboba.
+2024-06-03 20:06:44 [WARNING] Actor Pupa was already added.
+2024-06-03 20:06:44 [INFO]    User abobus233 has logged in.
+2024-06-03 20:06:44 [INFO]    Collection class object was created (Plusi Dla loxov).
