@@ -1,4 +1,4 @@
-# Install script for directory: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes
+# Install script for directory: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -551,7 +551,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3"
 		},
 		{
 			"name" : "CMAKE_INSTALL_BINDIR",
@@ -1527,7 +1527,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug"
 		},
 		{
 			"name" : "Mase_Cinema_Project_IS_TOP_LEVEL",
@@ -1551,7 +1551,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3"
 		},
 		{
 			"name" : "OPENGL_INCLUDE_DIR",
@@ -6175,7 +6175,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/mysql-queries"
 		},
 		{
 			"name" : "mysql-queries_IS_TOP_LEVEL",
@@ -6199,7 +6199,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries"
+			"value" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/mysql-queries"
 		}
 	],
 	"kind" : "cache",

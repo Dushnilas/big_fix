@@ -1,4 +1,4 @@
-# Install script for directory: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries
+# Install script for directory: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/mysql-queries
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -80,7 +80,7 @@ rule CXX_STATIC_LIBRARY_LINKER__mysql-queries_Debug
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH -B/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug
+  command = /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3 -B/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug
   description = Re-running CMake...
   generator = 1
 

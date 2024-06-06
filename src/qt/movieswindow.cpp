@@ -8,7 +8,7 @@
 #include <iostream>
 #include "backend.h"
 
-MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent) {
+MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow(new UserProfileWindow(this)) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     // Logo
@@ -22,7 +22,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent) {
 
     // User Profile button
     userProfileButton = new QPushButton("User Profile", this);
-    connect(userProfileButton, &QPushButton::clicked, this, &MoviesWindow::openUserProfile);
+    connect(userProfileButton, &QPushButton::clicked, this, &MoviesWindow::onUserProfileButtonClicked);
 
     // Movie display areas
     moviesArea1 = new QScrollArea(this);
@@ -111,9 +111,8 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent) {
 MoviesWindow::~MoviesWindow() {
 }
 
-void MoviesWindow::openUserProfile() {
-    std::cout << "User Profile button clicked!" << std::endl;
-    // Open the user profile window
+void MoviesWindow::onUserProfileButtonClicked() {
+    userProfileWindow->show();
 }
 
 void MoviesWindow::loadGenres() {

@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "../../../src/qt/movieswindow.h"
+#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -36,7 +37,7 @@ namespace {
 struct qt_meta_stringdata_CLASSMoviesWindowENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSMoviesWindowENDCLASS = QtMocHelpers::stringData(
     "MoviesWindow",
-    "openUserProfile",
+    "onUserProfileButtonClicked",
     ""
 );
 #else  // !QT_MOC_HAS_STRINGDATA
@@ -75,7 +76,7 @@ Q_CONSTINIT const QMetaObject MoviesWindow::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSMoviesWindowENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<MoviesWindow, std::true_type>,
-        // method 'openUserProfile'
+        // method 'onUserProfileButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -87,7 +88,7 @@ void MoviesWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         auto *_t = static_cast<MoviesWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->openUserProfile(); break;
+        case 0: _t->onUserProfileButtonClicked(); break;
         default: ;
         }
     }

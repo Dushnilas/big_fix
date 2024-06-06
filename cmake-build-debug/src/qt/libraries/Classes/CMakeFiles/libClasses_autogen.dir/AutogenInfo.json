@@ -1,40 +1,40 @@
 {
-	"BUILD_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen",
-	"CMAKE_BINARY_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug",
-	"CMAKE_CURRENT_BINARY_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes",
-	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes",
+	"BUILD_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes",
 	"CMAKE_EXECUTABLE" : "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake",
 	"CMAKE_LIST_FILES" : 
 	[
-		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/CMakeLists.txt"
+		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/CMakeLists.txt"
 	],
-	"CMAKE_SOURCE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH",
-	"DEP_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/deps",
+	"CMAKE_SOURCE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3",
+	"DEP_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "libClasses_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/logger/logger.h",
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/logger/logger.h",
 			"MU",
 			"6AY3GXVTTD/moc_logger.cpp",
 			null
 		],
 		[
-			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/movie/movies.h",
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/movie/movies.h",
 			"MU",
 			"LLE2V4S4QK/moc_movies.cpp",
 			null
 		],
 		[
-			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/users/user_and_dev.h",
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users/user_and_dev.h",
 			"MU",
 			"K4QOUK6UDW/moc_user_and_dev.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/include",
-	"MOC_COMPILATION_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/include",
+	"MOC_COMPILATION_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : [],
 	"MOC_DEPEND_FILTERS" : 
 	[
@@ -45,9 +45,9 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/logger",
-		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/movie",
-		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/users",
+		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/logger",
+		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/movie",
+		"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users",
 		"/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1",
 		"/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include",
 		"/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include",
@@ -73,31 +73,31 @@
 		"-c",
 		"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 8,
-	"PARSE_CACHE_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/CMakeFiles/libClasses_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/CMakeFiles/libClasses_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "/opt/homebrew/share/qt/libexec/moc",
 	"QT_UIC_EXECUTABLE" : "/opt/homebrew/share/qt/libexec/uic",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 7,
-	"SETTINGS_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/CMakeFiles/libClasses_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/CMakeFiles/libClasses_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/logger/logger.cpp",
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/logger/logger.cpp",
 			"MU",
 			null
 		],
 		[
-			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/movie/movies.cpp",
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/movie/movies.cpp",
 			"MU",
 			null
 		],
 		[
-			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/users/user_and_dev.cpp",
+			"/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users/user_and_dev.cpp",
 			"MU",
 			null
 		]

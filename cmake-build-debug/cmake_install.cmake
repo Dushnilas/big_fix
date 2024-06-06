@@ -1,4 +1,4 @@
-# Install script for directory: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH
+# Install script for directory: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,12 +39,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/cmake_install.cmake")
+  include("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/mysql-queries/cmake_install.cmake")
+  include("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/mysql-queries/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -55,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

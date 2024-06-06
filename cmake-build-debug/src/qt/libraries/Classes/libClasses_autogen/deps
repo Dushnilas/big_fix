@@ -1,9 +1,9 @@
 libClasses_autogen/timestamp: \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/CMakeLists.txt \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/logger/logger.cpp \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/logger/logger.h \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/movie/movies.cpp \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/movie/movies.h \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/users/user_and_dev.cpp \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/users/user_and_dev.h \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/CMakeLists.txt \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/logger/logger.cpp \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/logger/logger.h \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/movie/movies.cpp \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/movie/movies.h \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users/user_and_dev.cpp \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users/user_and_dev.h \
 	/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake

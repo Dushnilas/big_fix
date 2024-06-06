@@ -104,7 +104,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Mase_Cinema_Project::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Mase_Cinema_Project-Debug-97fd546e57c222537db8.json",
+					"jsonFile" : "target-Mase_Cinema_Project-Debug-8b60d972b4f69b82bcd3.json",
 					"name" : "Mase_Cinema_Project",
 					"projectIndex" : 0
 				},
@@ -125,7 +125,7 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "libClasses::@44316180c22626d90acb",
-					"jsonFile" : "target-libClasses-Debug-59e7a8d3f46a0aaee1b7.json",
+					"jsonFile" : "target-libClasses-Debug-c881e7e567afc6a9a0cf.json",
 					"name" : "libClasses",
 					"projectIndex" : 0
 				},
@@ -146,7 +146,7 @@
 				{
 					"directoryIndex" : 2,
 					"id" : "mysql-queries::@6c8de004c5334fdf3d9f",
-					"jsonFile" : "target-mysql-queries-Debug-677244bdd036547aa6cc.json",
+					"jsonFile" : "target-mysql-queries-Debug-8ff6c2594eb9be8abc62.json",
 					"name" : "mysql-queries",
 					"projectIndex" : 1
 				},
@@ -170,8 +170,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug",
-		"source" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH"
+		"build" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug",
+		"source" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3"
 	},
 	"version" : 
 	{

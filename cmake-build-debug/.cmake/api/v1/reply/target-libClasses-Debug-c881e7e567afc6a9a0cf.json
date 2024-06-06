@@ -50,20 +50,20 @@
 			[
 				{
 					"backtrace" : 2,
-					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/logger"
+					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/logger"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/movie"
+					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/movie"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/Classes/users"
+					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users"
 				},
 				{
 					"backtrace" : 0,
 					"isSystem" : true,
-					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/include"
+					"path" : "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/src/qt/libraries/Classes/libClasses_autogen/include"
 				}
 			],
 			"language" : "CXX",

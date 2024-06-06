@@ -63,8 +63,8 @@ mysql-queries_autogen/timestamp: \
 	/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-C.cmake \
 	/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-C.cmake \
 	/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang.cmake \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries/CMakeLists.txt \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries/mysql-queries.cpp \
-	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/libraries/mysql-queries/mysql-queries.h \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/mysql-queries/CMakeLists.txt \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/mysql-queries/mysql-queries.cpp \
+	/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/mysql-queries/mysql-queries.h \
 	/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake

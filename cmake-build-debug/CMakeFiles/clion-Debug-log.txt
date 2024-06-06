@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH -B /Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3 -B /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug
 -- The CXX compiler identification is AppleClang 15.0.0.15000309
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
@@ -22,4 +22,4 @@
 -- Detecting C compile features - done
 -- Configuring done (1.3s)
 -- Generating done (0.0s)
--- Build files have been written to: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/cmake-build-debug
+-- Build files have been written to: /Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/cmake-build-debug

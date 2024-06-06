@@ -9,6 +9,7 @@
 #include <QScrollArea>
 #include <vector>
 #include <memory>
+#include "userprofilewindow.h"
 
 class MoviesWindow : public QWidget {
     Q_OBJECT
@@ -18,7 +19,7 @@ public:
     ~MoviesWindow();
 
     private slots:
-        void openUserProfile();
+        void onUserProfileButtonClicked();
 
 private:
     QPushButton *userProfileButton;
@@ -27,6 +28,7 @@ private:
     QScrollArea *moviesArea2;
     QWidget *moviesContainer1;
     QWidget *moviesContainer2;
+    UserProfileWindow *userProfileWindow;
 
     void loadGenres();
     std::vector<std::string> fetchGenres();
