@@ -13,7 +13,7 @@ add_library(mysql-queries STATIC
 )
 
 # Link Python library
-target_link_libraries(mysql-queries PRIVATE ${PYTHON_LIB})
+target_link_libraries(mysql-queries ${PYTHON_LIB})
 
 # Ensure the include directories are available
 target_include_directories(mysql-queries PUBLIC

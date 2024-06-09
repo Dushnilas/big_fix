@@ -91,7 +91,7 @@ bool SignUpWindow::SignUp(const std::string& login, const std::string& password)
             ExecuteInsertQuery("library", "insert", "auth", data2)) {
 
             Logger::getInstance().logInfo("User " + login + " signed up.");
-            main_user = std::make_shared<User>(login, login, password, 0, "");
+            main_user = QSharedPointer<User>::create(login, login, password, 0, "");
             main_user->loadCol();
             return true;
         }

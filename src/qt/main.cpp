@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 
 
+
 int main(int argc, char *argv[])
 {
     initializePythonInterpreter("/Users/senya/CLionProjects/big_fix/src/qt/libraries/mysql-queries");

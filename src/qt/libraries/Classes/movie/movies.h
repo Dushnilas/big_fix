@@ -7,6 +7,7 @@
 #include <map>
 #include <QSharedPointer>
 
+
 enum class Character {
     Actor,
     Producer,
