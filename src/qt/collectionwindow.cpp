@@ -5,7 +5,9 @@
 CollectionWindow::CollectionWindow(const QString &collectionName, QWidget *parent)
     : QWidget(parent), collectionName(collectionName)
 {
-    qDebug() << "CollectionWindow constructor called with collectionName:" << collectionName;
+    setWindowFlags(Qt::Window); // Ensure it's a top-level window
+    setWindowTitle(QString("Collection: %1").arg(collectionName));
+    setFixedSize(800, 600);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
@@ -42,9 +44,6 @@ CollectionWindow::CollectionWindow(const QString &collectionName, QWidget *paren
     mainLayout->addWidget(backButton);
 
     setLayout(mainLayout);
-    setWindowTitle(QString("Collection: %1").arg(collectionName));
-    setFixedSize(800, 600);
-    qDebug() << "CollectionWindow created and shown";
 }
 
 CollectionWindow::~CollectionWindow()
