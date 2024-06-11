@@ -27,6 +27,7 @@ public:
     void onEditNameClicked();
     void onEditEmailClicked();
     void onReturnFromCollection();
+    void onAddCollectionClicked();
 
 private:
     QWidget *previousWindow;
@@ -41,6 +42,7 @@ private:
     QWidget *collectionsContainer;
     QPushButton *backButton;
     CollectionWindow *collectionWindow;
+    QPushButton *addCollectionButton;
 };
 
 #endif // USERPROFILEWINDOW_H

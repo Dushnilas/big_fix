@@ -29,7 +29,7 @@ void loadMovies() {
     query = "SELECT t.title_name, t.tconst, t.description, t.title_type, t.year_start, t.year_end, t.is_adult, r.rating, "
             "r.num_votes, tl.image_url FROM titles t JOIN ratings r ON t.tconst = r.tconst JOIN titles_image tl on "
             "t.tconst = tl.tconst WHERE t.description IS NOT NULL AND t.description != '' AND t.year_start > 1950 AND "
-            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 30;";
+            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 10000;";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
 
     int counter = 0;

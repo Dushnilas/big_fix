@@ -1,11 +1,13 @@
 #include "userprofilewindow.h"
 #include "collectionwindow.h"
+#include "collectiondialog.h"
+#include "backend.h"
 #include <QPixmap>
 #include <QPushButton>
 #include <QInputDialog>
+#include <QMessageBox>
 #include <QDebug>
-
-#include "backend.h"
+#include <QVBoxLayout>
 
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
@@ -14,7 +16,7 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
 
     photoLabel = new QLabel(this);
-    QPixmap userPhoto("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/user_photo.jpg");
+    QPixmap userPhoto("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/user_photo.jpg");
     photoLabel->setPixmap(userPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     photoLabel->setFixedSize(200, 200);
     photoLabel->setStyleSheet("border: 1px solid black;");
@@ -92,11 +94,15 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
 
     collectionsArea->setFixedHeight(300);
 
+    addCollectionButton = new QPushButton("Add Collection", this);
+    connect(addCollectionButton, &QPushButton::clicked, this, &UserProfileWindow::onAddCollectionClicked);
+
     backButton = new QPushButton("Back", this);
     connect(backButton, &QPushButton::clicked, this, &UserProfileWindow::onBackButtonClicked);
 
     mainLayout->addLayout(topLayout);
     mainLayout->addWidget(collectionsArea);
+    mainLayout->addWidget(addCollectionButton);
     mainLayout->addWidget(backButton);
 
     centralWidget->setLayout(mainLayout);
@@ -167,5 +173,48 @@ void UserProfileWindow::onEditEmailClicked()
     {
         main_user->setEmail(text.toStdString());
         mailLabel->setText("Email: " + text);
+    }
+}
+
+void UserProfileWindow::onAddCollectionClicked()
+{
+    CollectionDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QString collectionName = dialog.getCollectionName();
+        QString imagePath = dialog.getSelectedImagePath();
+
+        if (collectionName.length() > 30) {
+            QMessageBox::warning(this, tr("Invalid Name"), tr("Collection name must be 30 characters or less."));
+            return;
+        }
+
+        if (imagePath.isEmpty()) {
+            QMessageBox::warning(this, tr("No Image Selected"), tr("You must select an image for the collection."));
+            return;
+        }
+
+        // Add new collection button to the layout
+        QPushButton *collectionButton = new QPushButton(this);
+        collectionButton->setIcon(QIcon(imagePath));
+        collectionButton->setIconSize(QSize(150, 150));
+        collectionButton->setFixedSize(150, 150);
+        collectionButton->setStyleSheet("border: none;");
+        connect(collectionButton, &QPushButton::clicked, [this, collectionName]() {
+            onCollectionClicked(collectionName);
+        });
+
+        QVBoxLayout *collectionLayout = new QVBoxLayout();
+        collectionLayout->setAlignment(Qt::AlignCenter);
+        collectionLayout->addWidget(collectionButton);
+
+        QLabel *collectionLabel = new QLabel(collectionName, this);
+        collectionLabel->setAlignment(Qt::AlignCenter);
+        collectionLayout->addWidget(collectionLabel);
+
+        QWidget *collectionWidget = new QWidget();
+        collectionWidget->setLayout(collectionLayout);
+
+        QHBoxLayout *collectionsLayout = qobject_cast<QHBoxLayout*>(collectionsContainer->layout());
+        collectionsLayout->addWidget(collectionWidget);
     }
 }

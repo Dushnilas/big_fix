@@ -25,7 +25,7 @@ GenreWindow::GenreWindow(const QString &genre, QWidget *parent) : QWidget(parent
         for (int j = 0; j < 4; ++j) {
             int movieId = i * 4 + j + 1;
             QPushButton *movieButton = new QPushButton(this);
-            movieButton->setIcon(QIcon("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/film_image.jpg"));
+            movieButton->setIcon(QIcon("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/film_image.jpg"));
             movieButton->setIconSize(QSize(100, 150));
             connect(movieButton, &QPushButton::clicked, [this, movieId]() { onMovieButtonClicked(movieId); });
             gridLayout->addWidget(movieButton, i, j);
