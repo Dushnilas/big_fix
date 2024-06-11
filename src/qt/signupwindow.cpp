@@ -69,40 +69,13 @@ void SignUpWindow::handleSignUp() {
               << ", age: " << age.toStdString()
               << ", email: " << email.toStdString() << std::endl;
 
-    if (SignUp(username.toStdString(), password.toStdString())) {
+    if (SignUp(username.toStdString(), password.toStdString(), 0)) {
         MoviesWindow *moviesWindow = new MoviesWindow();
         moviesWindow->show();
         this->close();
     } else {
         QMessageBox::warning(this, "Sign Up Failed", "User with this login already exists.");
     }
-}
-
-bool SignUpWindow::SignUp(const std::string& login, const std::string& password) {
-    std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", "SELECT * FROM auth;");
-
-    if (std::find_if(buf.begin(), buf.end(), [&](const auto& c) {
-        return login == c.at("user_id"); }) == buf.end()) {
-
-        std::vector<std::map<std::string, std::string>> data = {
-                {{"user_id", login}, {"name", login}, {"age", "0"}, {"photo_url", ""}}};
-
-        std::vector<std::map<std::string, std::string>> data2 = {
-                {{"user_id", login}, {"pass", password}}};
-
-        if (ExecuteInsertQuery("library", "insert", "user_profile", data) &&
-            ExecuteInsertQuery("library", "insert", "auth", data2)) {
-
-            Logger::getInstance().logInfo("User " + login + " signed up.");
-            main_user = std::make_shared<User>(login, login, password, 0, "");
-            main_user->loadCol();
-            return true;
-        }
-    }
-
-    Logger::getInstance().logError("User with this login already exists.");
-    buf.clear();
-    return false;
 }
 
 void SignUpWindow::onBackButtonClicked() {

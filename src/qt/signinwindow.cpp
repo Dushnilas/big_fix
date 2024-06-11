@@ -44,7 +44,7 @@ void SignInWindow::onSignInButtonClicked() {
 
     if (SignIn(login, pass)) {
         Logger::getInstance().logError("User " + login + " signed in.");
-        qDebug() << "User signed in successfully.";
+        qDebug() << "User signed in successfully." << main_user->getLogin();
         showMoviesWindow();
     } else {
         Logger::getInstance().logError("Wrong login or password");
@@ -54,6 +54,7 @@ void SignInWindow::onSignInButtonClicked() {
 }
 
 void SignInWindow::showMoviesWindow() {
+
     if (!moviesWindow) {
         qDebug() << "Creating MoviesWindow.";
         moviesWindow = new MoviesWindow();

@@ -114,6 +114,8 @@ int main(int argc, char *argv[])
 
 //    ------------- QT PART -----------------
 
+
+
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

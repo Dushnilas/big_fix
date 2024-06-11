@@ -55,3 +55,13 @@ target_link_libraries(Mase_Cinema_Project PRIVATE
         mysql-queries
         /opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/libpython3.12.dylib
 )
+
+target_link_libraries(libClasses PRIVATE
+        Qt6::Core
+        Qt6::Widgets
+)
+
+target_link_libraries(mysql-queries PRIVATE
+        Qt6::Core
+        Qt6::Widgets
+)

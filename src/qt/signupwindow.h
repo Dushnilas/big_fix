@@ -28,7 +28,6 @@ private:
     QPushButton *signUpButton;
     QPushButton *backButton;
 
-    bool SignUp(const std::string& login, const std::string& password);
 };
 
 #endif // SIGNUPWINDOW_H
