@@ -41,6 +41,7 @@ public:
     void setPhoto(const std::string& photo);
     std::string getPhoto() const;
     Gender getGender() const;
+    void setGender(const std::string& gender);
 
 private:
     std::vector<QSharedPointer<Collection>> _all_collection;
@@ -55,21 +56,5 @@ public:
     bool leaveComment(const QSharedPointer<Movie>& movie, const std::string& com);
     void makeVote(const QSharedPointer<Movie>& movie, int vote);
 };
-//
-// class User : public AllUsers{
-// private:
-//     userAccess access = userAccess::User;
-//
-// public:
-//     User(std::string name, std::string login, std::string password, int age, std::string photo);
-// };
-//
-// class Developer : private AllUsers{
-// private:
-//     userAccess access = userAccess::Developer;
-//
-// public:
-//     Developer(std::string name, std::string login, std::string password, int age, std::string photo);
-// };
 
 #endif

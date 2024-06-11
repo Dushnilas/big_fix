@@ -8,6 +8,7 @@
 
 enum class Gender
 {
+    Undefined,
     Male,
     Female,
     Walmart_Bag,
@@ -56,8 +57,7 @@ enum class Gender
     Penza,
     Planta_MF_3B_Smart_Compression,
     Avenger,
-    Porshe_Panamera_Turbo,
-    Undefined,
+    Porshe_Panamera_Turbo
 };
 
 const std::map<Gender, std::string> genderMap = {
@@ -114,6 +114,11 @@ const std::map<Gender, std::string> genderMap = {
 };
 
 std::string genderToString(Gender gender);
+
 std::vector<std::string> getAllGenders();
+
+std::map<std::string, Gender> ReverseMap();
+
+Gender strToGender(const std::string &genderStr);
 
 #endif

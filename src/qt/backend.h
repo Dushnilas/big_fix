@@ -29,17 +29,13 @@ bool compareMovies(const QSharedPointer<Movie>& m1, const QSharedPointer<Movie>&
 
 void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string& query, int n);
 
-bool SignInFun(const std::string& login, const std::string& password);
-
-bool SignUpFun(const std::string& login, const std::string& password, int age);
-
 void print_select_genres(std::vector<std::pair<std::string, std::vector<std::string>>> results);
 
 void print_select(std::vector<std::map<std::string, std::string>> results);
 
 bool SignIn(const std::string& login, const std::string& password);
 
-bool SignUp(const std::string& login, const std::string& password, int age);
+bool SignUp(const std::string& login, const std::string& password, const std::string& name, int age, const std::string& email, const std::string& gender);
 
 std::vector<std::string> GetGenres(const std::string& library);
 

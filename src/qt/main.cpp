@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
 //    ------------- QT PART -----------------
 
-
+    loadMovies();
 
     QApplication a(argc, argv);
     MainWindow w;

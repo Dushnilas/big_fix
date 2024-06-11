@@ -16,3 +16,21 @@ std::vector<std::string> getAllGenders() {
 
     return genders;
 }
+
+std::map<std::string, Gender> ReverseMap() {
+    std::map<std::string, Gender> reverseGenderMap;
+    for (const auto &pair : genderMap) {
+        reverseGenderMap[pair.second] = pair.first;
+    }
+    return reverseGenderMap;
+}
+
+Gender strToGender(const std::string &genderStr) {
+    static const std::map<std::string, Gender> reverseGenderMap = ReverseMap();
+    auto it = reverseGenderMap.find(genderStr);
+    if (it != reverseGenderMap.end()) {
+        return it->second;
+    } else {
+        return Gender::Undefined;
+    }
+}

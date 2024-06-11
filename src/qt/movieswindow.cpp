@@ -11,6 +11,8 @@
 #include <QPushButton>
 #include <QDebug>
 
+#include "backend.h"
+
 MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow(new UserProfileWindow(this)), genreWindow(nullptr), movieDetailWindow(nullptr) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
@@ -49,43 +51,109 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
 
     QPixmap filmImage("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/BITCH/src/qt/film_image.jpg");
 
-    for (int i = 1; i <= 10; ++i) {
-        QPushButton *movieButton = new QPushButton(this);
-        movieButton->setIcon(QIcon(filmImage));
-        movieButton->setIconSize(QSize(150, 150));
-        connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
-
-        QLabel *movieTitle = new QLabel(QString("Movie Title %1").arg(i), this);
-        movieTitle->setAlignment(Qt::AlignCenter);
-
-        QVBoxLayout *movieLayout = new QVBoxLayout();
-        movieLayout->addWidget(movieButton);
-        movieLayout->addWidget(movieTitle);
-
-        QWidget *movieWidget = new QWidget();
-        movieWidget->setLayout(movieLayout);
-
-        moviesLayout1->addWidget(movieWidget);
+    std::vector<QSharedPointer<Movie>> movies_no_rec;
+    std::vector<QSharedPointer<Movie>> movies_cb_rec;
+    std::vector<QSharedPointer<Movie>> movies_user_rec;
+    if (isLiked()) {
+        std::vector<std::string> cb_rec = GetContentRecommendations(main_user->getLogin());
+        std::vector<std::string> user_rec = GetUserRecommendations(main_user->getLogin());
+        getRecommendation(movies_cb_rec, cb_rec);
+        getRecommendation(movies_user_rec, user_rec);
+    }
+    else {
+        movies_no_rec = getMoviesSorted(10);
     }
 
-    for (int i = 11; i <= 20; ++i) {
-        QPushButton *movieButton = new QPushButton(this);
-        movieButton->setIcon(QIcon(filmImage));
-        movieButton->setIconSize(QSize(150, 150));
-        connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+    std::cout << movies_no_rec.size() << "\n";
+    std::cout << movies_cb_rec.size() << "\n";
+    std::cout << movies_user_rec.size() << "\n";
+    std::cout << all_movies.size() << "\n";
 
-        QLabel *movieTitle = new QLabel(QString("Movie Title %1").arg(i), this);
-        movieTitle->setAlignment(Qt::AlignCenter);
 
-        QVBoxLayout *movieLayout = new QVBoxLayout();
-        movieLayout->addWidget(movieButton);
-        movieLayout->addWidget(movieTitle);
+    if (!movies_no_rec.empty()) {
+        for (int i = 0; i < movies_no_rec.size(); ++i) {
+            QPushButton *movieButton = new QPushButton(this);
+            movieButton->setIcon(QIcon(filmImage));
+            movieButton->setIconSize(QSize(150, 150));
+            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
 
-        QWidget *movieWidget = new QWidget();
-        movieWidget->setLayout(movieLayout);
+            QLabel *movieTitle = new QLabel(QString::fromStdString(movies_no_rec[i]->getName()),this);
+            movieTitle->setAlignment(Qt::AlignCenter);
+            std::cout << movies_no_rec[i]->getPhoto() << "\n";
+            QVBoxLayout *movieLayout = new QVBoxLayout();
+            movieLayout->addWidget(movieButton);
+            movieLayout->addWidget(movieTitle);
 
-        moviesLayout2->addWidget(movieWidget);
+            QWidget *movieWidget = new QWidget();
+            movieWidget->setLayout(movieLayout);
+
+            moviesLayout1->addWidget(movieWidget);
+        }
+
+        for (int i = 0; i < movies_no_rec.size(); ++i) {
+            QPushButton *movieButton = new QPushButton(this);
+            movieButton->setIcon(QIcon(filmImage));
+            movieButton->setIconSize(QSize(150, 150));
+            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+
+            QLabel *movieTitle = new QLabel(QString::fromStdString(movies_no_rec[i]->getName()),this);
+            movieTitle->setAlignment(Qt::AlignCenter);
+
+            QVBoxLayout *movieLayout = new QVBoxLayout();
+            movieLayout->addWidget(movieButton);
+            movieLayout->addWidget(movieTitle);
+
+            QWidget *movieWidget = new QWidget();
+            movieWidget->setLayout(movieLayout);
+
+            moviesLayout2->addWidget(movieWidget);
+        }
+
+
     }
+    else {
+        for (int i = 0; i < movies_cb_rec.size(); ++i) {
+            QPushButton *movieButton = new QPushButton(this);
+            movieButton->setIcon(QIcon(filmImage));
+            movieButton->setIconSize(QSize(150, 150));
+            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+
+            QLabel *movieTitle = new QLabel(QString::fromStdString(movies_cb_rec[i]->getName()),this);
+            std::cout << movies_cb_rec[i]->getPhoto() << "\n";
+            movieTitle->setAlignment(Qt::AlignCenter);
+
+            QVBoxLayout *movieLayout = new QVBoxLayout();
+            movieLayout->addWidget(movieButton);
+            movieLayout->addWidget(movieTitle);
+
+            QWidget *movieWidget = new QWidget();
+            movieWidget->setLayout(movieLayout);
+
+            moviesLayout1->addWidget(movieWidget);
+        }
+
+        for (int i = 0; i < movies_user_rec.size(); ++i) {
+            QPushButton *movieButton = new QPushButton(this);
+            movieButton->setIcon(QIcon(filmImage));
+            movieButton->setIconSize(QSize(150, 150));
+            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+
+            QLabel *movieTitle = new QLabel(QString::fromStdString(movies_user_rec[i]->getName()),this);
+            movieTitle->setAlignment(Qt::AlignCenter);
+
+            QVBoxLayout *movieLayout = new QVBoxLayout();
+            movieLayout->addWidget(movieButton);
+            movieLayout->addWidget(movieTitle);
+
+            QWidget *movieWidget = new QWidget();
+            movieWidget->setLayout(movieLayout);
+
+            moviesLayout2->addWidget(movieWidget);
+        }
+    }
+
+
+
 
     moviesContainer1->setLayout(moviesLayout1);
     moviesArea1->setWidget(moviesContainer1);

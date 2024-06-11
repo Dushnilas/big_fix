@@ -26,10 +26,10 @@ void loadMovies() {
     genres = ExecuteSelectGenresQuery("library", query);
 
     // Load all movies in vector of maps [{title_name: name, ...}, {title_name: name, ...}]
-    query = "SELECT t.title_name, t.tconst, t.description, t.title_type, t.year_start, t.year_end, "
-            "t.is_adult, r.rating, r.num_votes FROM titles t JOIN ratings r ON t.tconst = r.tconst WHERE "
-            "t.description IS NOT NULL AND t.description != '' AND t.year_start > 1950 AND r.num_votes > 200 "
-            "ORDER BY r.num_votes DESC LIMIT 10000;";
+    query = "SELECT t.title_name, t.tconst, t.description, t.title_type, t.year_start, t.year_end, t.is_adult, r.rating, "
+            "r.num_votes, tl.image_url FROM titles t JOIN ratings r ON t.tconst = r.tconst JOIN titles_image tl on "
+            "t.tconst = tl.tconst WHERE t.description IS NOT NULL AND t.description != '' AND t.year_start > 1950 AND "
+            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 30;";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
 
     int counter = 0;
@@ -78,10 +78,14 @@ std::vector<QSharedPointer<Movie>> getMoviesSorted(int n, const std::string& gen
             }
         }
     }
+    else {
+        genreMovies = all_movies;
+    }
 
     std::sort(genreMovies.begin(), genreMovies.end(),[](const QSharedPointer<Movie>& a, const QSharedPointer<Movie>& b) {
         return a->getRating() > b->getRating(); });
 
+    std::cout << genreMovies.size() << '\n';
     if (genreMovies.size() <= n) return genreMovies;
     return {genreMovies.begin(), genreMovies.begin() + n};
 }
@@ -125,14 +129,15 @@ bool SignIn(const std::string &login, const std::string &password) {
     return false;
 }
 
-bool SignUp(const std::string& login, const std::string& password, int age){
+bool SignUp(const std::string& login, const std::string& password, const std::string& name, int age, const std::string& email, const std::string& gender){
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", "SELECT * FROM auth;");
 
     if (std::find_if(buf.begin(), buf.end(), [&](const auto& c) {
         return login == c.at("user_id"); }) == buf.end()) {
 
         std::vector<std::map<std::string, std::string>> data = {
-                {{"user_id", login}, {"name", login,}, {"age", std::to_string(age)}, {"photo_url", ""}}};
+                {{"user_id", login}, {"name", name,}, {"age", std::to_string(age)}, {"photo_url", ""},
+                    {"email", email}, {"gender", gender}}};
 
         std::vector<std::map<std::string, std::string>> data2 = {
                 {{"user_id", login}, {"pass", password,}}};
@@ -141,7 +146,8 @@ bool SignUp(const std::string& login, const std::string& password, int age){
             ExecuteInsertQuery("library", "insert", "auth", data2)){
 
             Logger::getInstance().logInfo("User " + login + " signed up.");
-            main_user = QSharedPointer<AllUsers>::create(login, login, password, 0, "");
+            main_user = QSharedPointer<AllUsers>::create(name, login, password, age, "");
+            main_user->setEmail(email);
             main_user->loadCol();
             return true;
         }
@@ -172,10 +178,6 @@ void print_select(std::vector<std::map<std::string, std::string>> results) {
         std::cout << '\n';
     }
 }
-
-// bool SignInFun(const std::string& login, const std::string& password) {
-//     return SignIn(login, password); // реализация
-// }
 
 bool aboba(const QSharedPointer<Movie>& m, const std::string& query) {
     return m->getTconst() == query;

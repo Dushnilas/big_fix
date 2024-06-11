@@ -80,6 +80,11 @@ Gender AllUsers::getGender() const {
     return _gender;
 }
 
+void AllUsers::setGender(const std::string& gender) {
+    _gender = strToGender(gender);
+}
+
+
 bool compareCol(const QSharedPointer<Collection>& col1, const QSharedPointer<Collection>& col2) {
     return col1.get() == col2.get();
 }

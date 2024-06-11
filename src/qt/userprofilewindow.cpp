@@ -5,6 +5,8 @@
 #include <QInputDialog>
 #include <QDebug>
 
+#include "backend.h"
+
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
 {
@@ -17,10 +19,10 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     photoLabel->setFixedSize(200, 200);
     photoLabel->setStyleSheet("border: 1px solid black;");
 
-    userIdLabel = new QLabel("User ID: user_id", this);
-    nameLabel = new QLabel("Name: [User's Name]", this);
-    ageLabel = new QLabel("Age: [User's Age]", this);
-    mailLabel = new QLabel("Mail: [User's Email]", this);
+    userIdLabel = new QLabel(QString::fromStdString(main_user->getLogin()), this);
+    nameLabel = new QLabel("Name: " + QString::fromStdString(main_user->getLogin()), this);
+    ageLabel = new QLabel("Age: " + QString::fromStdString(std::to_string(main_user->getAge())), this);
+    mailLabel = new QLabel("Email: " + QString::fromStdString(main_user->getEmail()), this);
 
     editButton1 = new QPushButton("Edit", this);
     editButton2 = new QPushButton("Edit", this);
@@ -150,6 +152,7 @@ void UserProfileWindow::onEditNameClicked()
                                          nameLabel->text().mid(6), &ok);
     if (ok && !text.isEmpty())
     {
+        main_user->setName(text.toStdString());
         nameLabel->setText("Name: " + text);
     }
 }
@@ -162,6 +165,7 @@ void UserProfileWindow::onEditEmailClicked()
                                          mailLabel->text().mid(6), &ok);
     if (ok && !text.isEmpty())
     {
-        mailLabel->setText("Mail: " + text);
+        main_user->setEmail(text.toStdString());
+        mailLabel->setText("Email: " + text);
     }
 }

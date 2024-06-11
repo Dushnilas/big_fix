@@ -8,7 +8,12 @@
 #include <QLabel>
 #include <QDateEdit>
 #include <QDate>
+#include <QComboBox>
+#include <vector>
+#include <string>
 #include "mainwindow.h"
+
+std::vector<std::string> getAllGenders();
 
 class SignUpWindow : public QWidget {
     Q_OBJECT
@@ -29,6 +34,7 @@ private:
     QDateEdit *dobDateEdit;
     QLabel *ageLabel;
     QLineEdit *emailLineEdit;
+    QComboBox *genderComboBox;
     QPushButton *signUpButton;
     QPushButton *backButton;
     int calculateAge(const QDate &date);
