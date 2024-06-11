@@ -24,8 +24,13 @@ SignUpWindow::SignUpWindow(QWidget *parent)
     QLabel *nameLabel = new QLabel("Name:", this);
     nameLineEdit = new QLineEdit(this);
 
-    QLabel *ageLabel = new QLabel("Age:", this);
-    ageLineEdit = new QLineEdit(this);
+    QLabel *dobLabel = new QLabel("Date of Birth:", this);
+    dobDateEdit = new QDateEdit(this);
+    dobDateEdit->setCalendarPopup(true);
+    dobDateEdit->setDisplayFormat("yyyy-MM-dd");
+
+    ageLabel = new QLabel("Age: ", this);
+    ageLabel->setVisible(false);  // Initially hide the age label
 
     QLabel *emailLabel = new QLabel("Email:", this);
     emailLineEdit = new QLineEdit(this);
@@ -42,8 +47,9 @@ SignUpWindow::SignUpWindow(QWidget *parent)
     layout->addSpacing(20);
     layout->addWidget(nameLabel);
     layout->addWidget(nameLineEdit);
+    layout->addWidget(dobLabel);
+    layout->addWidget(dobDateEdit);
     layout->addWidget(ageLabel);
-    layout->addWidget(ageLineEdit);
     layout->addWidget(emailLabel);
     layout->addWidget(emailLineEdit);
     layout->addWidget(signUpButton);
@@ -52,6 +58,7 @@ SignUpWindow::SignUpWindow(QWidget *parent)
     setLayout(layout);
 
     connect(signUpButton, &QPushButton::clicked, this, &SignUpWindow::handleSignUp);
+    connect(dobDateEdit, &QDateEdit::dateChanged, this, &SignUpWindow::updateAge);
 }
 
 SignUpWindow::~SignUpWindow() {}
@@ -60,16 +67,18 @@ void SignUpWindow::handleSignUp() {
     QString username = usernameLineEdit->text();
     QString password = passwordLineEdit->text();
     QString name = nameLineEdit->text();
-    QString age = ageLineEdit->text();
+    QDate dob = dobDateEdit->date();
     QString email = emailLineEdit->text();
+    int age = calculateAge(dob);
 
     std::cout << "Sign up with username: " << username.toStdString()
               << ", password: " << password.toStdString()
               << ", name: " << name.toStdString()
-              << ", age: " << age.toStdString()
+              << ", date of birth: " << dob.toString().toStdString()
+              << ", age: " << age
               << ", email: " << email.toStdString() << std::endl;
 
-    if (SignUp(username.toStdString(), password.toStdString(), 0)) {
+    if (SignUp(username.toStdString(), password.toStdString(), age)) {
         MoviesWindow *moviesWindow = new MoviesWindow();
         moviesWindow->show();
         this->close();
@@ -82,4 +91,20 @@ void SignUpWindow::onBackButtonClicked() {
     MainWindow *mainWindow = new MainWindow();
     mainWindow->show();
     this->close();
+}
+
+void SignUpWindow::updateAge(const QDate &date) {
+    int age = calculateAge(date);
+    ageLabel->setText("Age: " + QString::number(age));
+    ageLabel->setVisible(true);  // Show the age label when the date is selected
+}
+
+int SignUpWindow::calculateAge(const QDate &date) {
+    QDate currentDate = QDate::currentDate();
+    int age = currentDate.year() - date.year();
+    if (currentDate.month() < date.month() ||
+        (currentDate.month() == date.month() && currentDate.day() < date.day())) {
+        age--;
+    }
+    return age;
 }

@@ -2,10 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
-#include "../backend/libraries/Classes/movie/movies.h"
-#include "../backend/libraries/Classes/users/user_and_dev.h"
-#include "../backend/libraries/Classes/logger/logger.h"
-#include "../backend/libraries/mysql-queries/mysql-queries.h"
 #include "backend.h"
 
 std::vector<QSharedPointer<Movie>> all_movies;

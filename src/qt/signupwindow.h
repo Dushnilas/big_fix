@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QDateEdit>
+#include <QDate>
 #include "mainwindow.h"
 
 class SignUpWindow : public QWidget {
@@ -18,16 +20,18 @@ public:
     private slots:
         void handleSignUp();
     void onBackButtonClicked();
+    void updateAge(const QDate &date);
 
 private:
     QLineEdit *usernameLineEdit;
     QLineEdit *passwordLineEdit;
     QLineEdit *nameLineEdit;
-    QLineEdit *ageLineEdit;
+    QDateEdit *dobDateEdit;
+    QLabel *ageLabel;
     QLineEdit *emailLineEdit;
     QPushButton *signUpButton;
     QPushButton *backButton;
-
+    int calculateAge(const QDate &date);
 };
 
 #endif // SIGNUPWINDOW_H

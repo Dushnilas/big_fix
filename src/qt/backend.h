@@ -5,10 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
-#include "../backend/libraries/Classes/movie/movies.h"
-#include "../backend/libraries/Classes/users/user_and_dev.h"
-#include "../backend/libraries/Classes/logger/logger.h"
-#include "../backend/libraries/mysql-queries/mysql-queries.h"
+#include "libraries/Classes/movie/movies.h"
+#include "libraries/Classes/users/user_and_dev.h"
+#include "libraries/Classes/logger/logger.h"
+#include "libraries/mysql-queries/mysql-queries.h"
 
 extern  QSharedPointer<AllUsers> main_user;
 extern  std::vector<QSharedPointer<Movie>> all_movies;
