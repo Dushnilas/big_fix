@@ -10,9 +10,11 @@
 #include "../../mysql-queries/mysql-queries.h"
 
 
-AllUsers::AllUsers(std::string name, std::string login, std::string password, int age, std::string photo)
+AllUsers::AllUsers(std::string name, std::string login, std::string password, int age, std::string photo, const std::string& gender)
     : _name(std::move(name)), _login(std::move(login)), _password(std::move(password)), _age(age), _photo_url(std::move(photo)) {
-    std::cout << "aboba";
+
+    _gender = strToGender(gender);
+
     Logger::getInstance().logInfo("User " + _login + " has logged in.");
 }
 
@@ -84,21 +86,25 @@ Gender AllUsers::getGender() const {
 
 void AllUsers::setGender(const std::string& gender) {
     _gender = strToGender(gender);
+
+    ExecuteUpdateQuery("library", "UPDATE user_profile SET gender = '" + genderToString(_gender) + "' WHERE user_id = '" + _login + "';");
+
+    Logger::getInstance().logInfo("User " + _login + " changed gender to " + genderToString(_gender) + ".");
 }
 
 
 bool compareCol(const QSharedPointer<Collection>& col1, const QSharedPointer<Collection>& col2) {
-    return col1.get() == col2.get();
+    return col1->getId() == col2->getId();
 }
 
 void AllUsers::loadCol() {
-    std::string query = "SELECT collection_id, collection_name FROM user_collections WHERE user_id = '" + this->getLogin() + "'";
+    std::string query = "SELECT collection_id, collection_name, image_url FROM user_collections WHERE user_id = '" + this->getLogin() + "'";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
 
     int counter = 0;
     for (auto el: buf){
         auto col = QSharedPointer<Collection>::create(std::stoi(el.at("collection_id")),
-                                                el.at("collection_name"));
+                                                el.at("collection_name"), el.at("image_url"));
 
         if (std::find_if(_all_collection.begin(), _all_collection.end(), [&col](const QSharedPointer<Collection>& c) {
             return compareCol(c, col); }) == _all_collection.end()) {
@@ -136,6 +142,8 @@ bool AllUsers::removeCol(const QSharedPointer<Collection>& collection) {
 }
 
 bool AllUsers::createCol(const std::string& name, const std::string& photo_url) {
+    // if (_all_collection.size() >= 6) return false;
+
     for (const auto& el: _all_collection){
         if (el->getName() == name){
             std::cout << "Collection with that name already exists" << '\n';

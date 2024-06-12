@@ -36,7 +36,7 @@ void loadMovies() {
     query = "SELECT t.title_name, t.tconst, t.description, t.title_type, t.year_start, t.year_end, t.is_adult, r.rating, "
             "r.num_votes, tl.image_url FROM titles t JOIN ratings r ON t.tconst = r.tconst JOIN titles_image tl on "
             "t.tconst = tl.tconst WHERE t.description IS NOT NULL AND t.description != '' AND t.year_start > 1950 AND "
-            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 1000;";
+            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 10000;";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
 
     int counter = 0;
@@ -121,12 +121,13 @@ void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string&
 }
 
 bool SignIn(const std::string &login, const std::string &password) {
-    std::string query = "SELECT a.user_id, a.pass, u.name, u.age, u.photo_url FROM auth a JOIN user_profile u ON u.user_id = a.user_id;";
+    std::string query = "SELECT a.user_id, a.pass, u.name, u.age, u.photo_url, u.gender FROM auth a JOIN user_profile u ON u.user_id = a.user_id;";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
     for (const auto& el : buf) {
         if (login == el.at("user_id") && password == el.at("pass")) {
-            main_user = QSharedPointer<AllUsers>::create(el.at("name"), login, password, std::stoi(el.at("age")), el.at("photo_url"));
-            main_user->loadCol();
+            std::cout << el.at("name") << '\n';
+            main_user = QSharedPointer<AllUsers>::create(el.at("name"), login, password, std::stoi(el.at("age")),
+                el.at("photo_url"), el.at("gender"));
             Logger::getInstance().logError("User " + login + " signed in.");
             return true;
         }
@@ -153,9 +154,8 @@ bool SignUp(const std::string& login, const std::string& password, const std::st
             ExecuteInsertQuery("library", "insert", "auth", data2)){
 
             Logger::getInstance().logInfo("User " + login + " signed up.");
-            main_user = QSharedPointer<AllUsers>::create(name, login, password, age, "");
+            main_user = QSharedPointer<AllUsers>::create(name, login, password, age, "", gender);
             main_user->setEmail(email);
-            main_user->loadCol();
             return true;
         }
     }

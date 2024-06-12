@@ -8,8 +8,8 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QVBoxLayout>
-
-
+#include "genders.h"
+#include <QComboBox>
 
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
@@ -26,15 +26,18 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     photoLabel->setStyleSheet("border: 1px solid black;");
 
     userIdLabel = new QLabel(QString::fromStdString(main_user->getLogin()), this);
-    nameLabel = new QLabel("Name: " + QString::fromStdString(main_user->getLogin()), this);
+    nameLabel = new QLabel("Name: " + QString::fromStdString(main_user->getName()), this);
     ageLabel = new QLabel("Age: " + QString::fromStdString(std::to_string(main_user->getAge())), this);
+    genderLabel = new QLabel("Gender: " + QString::fromStdString(genderToString(main_user->getGender())), this);
     mailLabel = new QLabel("Email: " + QString::fromStdString(main_user->getEmail()), this);
 
     editButton1 = new QPushButton("Edit", this);
     editButton2 = new QPushButton("Edit", this);
+    editButton3 = new QPushButton("Edit", this);
 
     connect(editButton1, &QPushButton::clicked, this, &UserProfileWindow::onEditNameClicked);
     connect(editButton2, &QPushButton::clicked, this, &UserProfileWindow::onEditEmailClicked);
+    connect(editButton3, &QPushButton::clicked, this, &UserProfileWindow::onEditGenderClicked);
 
     QHBoxLayout *nameLayout = new QHBoxLayout();
     nameLayout->addWidget(nameLabel);
@@ -42,6 +45,10 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
 
     QHBoxLayout *ageLayout = new QHBoxLayout();
     ageLayout->addWidget(ageLabel);
+
+    QHBoxLayout *genderLayout = new QHBoxLayout();
+    genderLayout->addWidget(genderLabel);
+    genderLayout->addWidget(editButton3);
 
     QHBoxLayout *mailLayout = new QHBoxLayout();
     mailLayout->addWidget(mailLabel);
@@ -51,6 +58,7 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     infoLayout->addWidget(userIdLabel);
     infoLayout->addLayout(nameLayout);
     infoLayout->addLayout(ageLayout);
+    infoLayout->addLayout(genderLayout);
     infoLayout->addLayout(mailLayout);
 
     QHBoxLayout *topLayout = new QHBoxLayout();
@@ -63,27 +71,23 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     collectionsContainer = new QWidget(collectionsArea);
     QHBoxLayout *collectionsLayout = new QHBoxLayout(collectionsContainer);
 
-    QStringList collectionNames = {"Liked", "Watch Later"};
-    QStringList collectionLogos = {
-        qFilePath("/pictures/liked_logo.jpg"),
-        qFilePath("/pictures/watch_later_logo.jpg")
-    };
-
-    for (int i = 0; i < collectionNames.size(); ++i) {
+    std::vector<QSharedPointer<Collection>> all_colls = main_user->getAllCol();
+    std::cout << yellow_color_code << all_colls.size() << reset_color_code << "\n";
+    for (int i = 0; i < all_colls.size(); ++i) {
         QPushButton *collectionButton = new QPushButton(this);
-        collectionButton->setIcon(QIcon(collectionLogos[i]));
+        collectionButton->setIcon(QIcon(qFilePath(all_colls[i]->getPhoto())));
         collectionButton->setIconSize(QSize(150, 150));
         collectionButton->setFixedSize(150, 150);
         collectionButton->setStyleSheet("border: none;");
-        connect(collectionButton, &QPushButton::clicked, [this, collectionName = collectionNames[i]]() {
-            onCollectionClicked(collectionName);
+        connect(collectionButton, &QPushButton::clicked, [this, collectionName = QString::fromStdString(all_colls[i]->getName())]() {
+        onCollectionClicked(collectionName);
         });
 
         QVBoxLayout *collectionLayout = new QVBoxLayout();
         collectionLayout->setAlignment(Qt::AlignCenter);
         collectionLayout->addWidget(collectionButton);
 
-        QLabel *collectionLabel = new QLabel(collectionNames[i], this);
+        QLabel *collectionLabel = new QLabel(QString::fromStdString(all_colls[i]->getName()), this);
         collectionLabel->setAlignment(Qt::AlignCenter);
         collectionLayout->addWidget(collectionLabel);
 
@@ -180,13 +184,44 @@ void UserProfileWindow::onEditEmailClicked()
     }
 }
 
+void UserProfileWindow::onEditGenderClicked()
+{
+    QComboBox* genderComboBox = new QComboBox(this);
+    for (const auto &gender : getAllGenders()) {
+        genderComboBox->addItem(QString::fromStdString(gender));
+    }
+
+    QStringList genderList;
+    for (int i = 0; i < genderComboBox->count(); ++i) {
+        genderList << genderComboBox->itemText(i);
+    }
+
+    bool ok;
+    QString selectedGender = QInputDialog::getItem(this, tr("Edit Gender"),
+                                                   tr("Select new gender:"),
+                                                   genderList,
+                                                   0, false, &ok);
+    if (ok && !selectedGender.isEmpty())
+    {
+        main_user->setGender(selectedGender.toStdString());
+        genderLabel->setText("Gender: " + selectedGender);
+    }
+
+    delete genderComboBox;
+}
+
+
 void UserProfileWindow::onAddCollectionClicked()
 {
     CollectionDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
         QString collectionName = dialog.getCollectionName();
         QString imagePath = dialog.getSelectedImagePath();
-
+        std::string dbPath = replaceAllOccurrences(imagePath.toStdString(), MY_PATH);
+        if (main_user->getAllCol().size() >= 6) {
+            QMessageBox::warning(this, tr("Too Many Collections"), tr("You can create no more than SIX collections."));
+            return;
+        }
         if (collectionName.isEmpty()) {
             QMessageBox::warning(this, tr("Invalid Name"), tr("Collection name cannot be empty."));
             return;
@@ -202,13 +237,12 @@ void UserProfileWindow::onAddCollectionClicked()
             return;
         }
 
-        bool create_col_status = main_user->createCol(collectionName.toStdString(), imagePath.toStdString());
+        bool create_col_status = main_user->createCol(collectionName.toStdString(), dbPath);
 
         if (!create_col_status) {
             QMessageBox::warning(this, tr("Duplicate detected"), tr("Collection with this name already exists."));
             return;
         }
-
 
         QPushButton *collectionButton = new QPushButton(this);
         collectionButton->setIcon(QIcon(imagePath));

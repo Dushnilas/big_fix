@@ -50,7 +50,7 @@ const std::map<QSharedPointer<Movie>, Character>& Actor::getAllCharacters() cons
 }
 
 bool compareMovies(const QSharedPointer<Movie>& movie1, const QSharedPointer<Movie>& movie2) {
-    return movie1.get() == movie2.get();
+    return movie1->getTconst() == movie2->getTconst();
 }
 
 void Actor::addToMovie(const QSharedPointer<Movie>& movie) {
@@ -146,7 +146,7 @@ void Movie::updateRating(double new_vote) {
 }
 
 bool compareActors(const QSharedPointer<Actor>& actor1, const QSharedPointer<Actor>& actor2) {
-    return actor1.get() == actor2.get();
+    return actor1->getId() == actor2->getId();
 }
 
 void Movie::loadActors() {
@@ -225,8 +225,8 @@ void Movie::leaveComment(const std::string& com) {
 }
 
 // Definition of Collection class methods
-Collection::Collection(int collection_id, const std::string& name)
-        : _collection_id(collection_id), _name(name) {
+Collection::Collection(int collection_id, const std::string& name, const std::string& photo_url)
+        : _collection_id(collection_id), _name(name), _photo_url(photo_url) {
 //    Logger::getInstance().logInfo("Collection class object was created (" + name + ").");
 }
 

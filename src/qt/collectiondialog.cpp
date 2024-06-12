@@ -3,6 +3,17 @@
 #include <QPixmap>
 #include "backend.h"
 
+std::string replaceAllOccurrences(const std::string &str, const std::string &toReplace) {
+    std::string result = str;
+    size_t pos = 0;
+
+    while ((pos = result.find(toReplace, pos)) != std::string::npos) {
+        result.replace(pos, toReplace.length(), "");
+    }
+
+    return result;
+}
+
 CollectionDialog::CollectionDialog(QWidget *parent)
     : QDialog(parent), selectedImagePath(""), selectedButton(nullptr)
 {
@@ -53,6 +64,11 @@ QString CollectionDialog::getCollectionName() const
 QString CollectionDialog::getSelectedImagePath() const
 {
     return selectedImagePath;
+}
+
+std::string CollectionDialog::getDatabaseText() const {
+    std::string path = selectedImagePath.toStdString();
+    return replaceAllOccurrences(path, MY_PATH);
 }
 
 void CollectionDialog::onImageButtonClicked(int id)

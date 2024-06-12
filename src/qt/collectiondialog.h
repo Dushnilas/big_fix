@@ -17,6 +17,7 @@ public:
     explicit CollectionDialog(QWidget *parent = nullptr);
     QString getCollectionName() const;
     QString getSelectedImagePath() const;
+    std::string getDatabaseText() const;
 
     private slots:
         void onImageButtonClicked(int id);
@@ -28,5 +29,7 @@ private:
     QPushButton *selectedButton;
     void updateButtonStyles();
 };
+
+std::string replaceAllOccurrences(const std::string &str, const std::string &toReplace);
 
 #endif // COLLECTIONDIALOG_H

@@ -27,7 +27,7 @@ private:
     Gender _gender = Gender::Undefined;
 
 public:
-    AllUsers(std::string name, std::string login, std::string password, int age, std::string photo);
+    AllUsers(std::string name, std::string login, std::string password, int age, std::string photo, const std::string& gender);
 
     std::string getName() const;
     void setName(const std::string& name);

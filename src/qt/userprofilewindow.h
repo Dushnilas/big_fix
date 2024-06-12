@@ -7,6 +7,10 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QComboBox>
+#include <QInputDialog>
+#include <QString>
+#include <vector>
 
 class CollectionWindow;
 
@@ -26,6 +30,7 @@ public:
     void onCollectionClicked(const QString &collectionName);
     void onEditNameClicked();
     void onEditEmailClicked();
+    void onEditGenderClicked();
     void onReturnFromCollection();
     void onAddCollectionClicked();
 
@@ -35,14 +40,18 @@ private:
     QLabel *userIdLabel;
     QLabel *nameLabel;
     QLabel *ageLabel;
+    QLabel *genderLabel;
     QLabel *mailLabel;
     QPushButton *editButton1;
     QPushButton *editButton2;
+    QPushButton *editButton3;
     QScrollArea *collectionsArea;
     QWidget *collectionsContainer;
     QPushButton *backButton;
     CollectionWindow *collectionWindow;
     QPushButton *addCollectionButton;
+    QComboBox *genderComboBox;
+
 };
 
 #endif // USERPROFILEWINDOW_H

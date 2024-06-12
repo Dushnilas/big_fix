@@ -115,7 +115,7 @@ private:
     int _collection_id;
 
 public:
-    Collection(int collection_id, const std::string& name="Collection");
+    Collection(int collection_id, const std::string& name="Collection", const std::string& photo_url="");
 
     std::string getName() const;
     void setName(const std::string& name);
