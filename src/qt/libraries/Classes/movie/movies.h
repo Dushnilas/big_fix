@@ -8,12 +8,6 @@
 #include <QSharedPointer>
 
 
-enum class Character {
-    Actor,
-    Producer,
-    Director
-};
-
 enum class FilmType {
     Movie,
     TvMovie,
@@ -32,11 +26,10 @@ private:
     int _birth_year;
     int _death_year;
     int _actor_importance;
-    Character _n_role;
 
 public:
     Actor(std::string name, std::string character_played, std::string nconst, std::string photo_url, int birth_year,
-          int death_year, int actor_importance, const std::string& n_role);
+          int death_year, int actor_importance);
 
     std::string getName() const;
     std::string getId() const;
@@ -46,16 +39,16 @@ public:
 
 private:
     std::vector<QSharedPointer<Movie>> _movies;
-    std::map<QSharedPointer<Movie>, Character> _all_characters;
+    std::map<std::string, QSharedPointer<Movie>> _all_characters;
 
 public:
-    const std::map<QSharedPointer<Movie>, Character>& getAllCharacters() const;
-    void addToMovie(const QSharedPointer<Movie>& movie);
-    void removeMovie(const QSharedPointer<Movie>& movie);
+    const std::map<std::string, QSharedPointer<Movie>>& getAllCharacters() const;
+    // void addToMovie(const QSharedPointer<Movie>& movie);
+    // void removeMovie(const QSharedPointer<Movie>& movie);
     const std::vector<QSharedPointer<Movie>>& getMovies() const;
 };
 
-class Movie : public std::enable_shared_from_this<Movie> {
+class Movie {
 private:
     const std::string _name;
     const std::string _tconst;
@@ -89,22 +82,23 @@ public:
     void updateRating(double new_vote);
 
 private:
-    std::vector<QSharedPointer<Actor>> _actors;
+    std::vector<QSharedPointer<Actor>> _aboba;
+    std::map<std::string, std::vector<QSharedPointer<Actor>>> _actors;
 
 public:
     void loadActors();
-    void clearActors();
-    const std::vector<QSharedPointer<Actor>>& getActors() const;
-    void addActor(const QSharedPointer<Actor>& actor);
-    void removeActor(const QSharedPointer<Actor>& actor);
+    // void clearActors();
+    std::map<std::string, std::vector<QSharedPointer<Actor>>>& getActors() ;
+    // void addActor(const QSharedPointer<Actor>& actor);
+    // void removeActor(const QSharedPointer<Actor>& actor);
 
 private:
-    std::vector<std::string> _comments;
+    std::vector<std::pair<std::string, std::string>> _comments;
 
 public:
     void loadComments();
-    const std::vector<std::string>& getComments() const;
-    void leaveComment(const std::string& com);
+    const std::vector<std::pair<std::string, std::string>>& getComments() const;
+    void leaveComment(const std::string& user_id, const std::string& com);
 };
 
 class Collection {

@@ -6,18 +6,11 @@
 #include <QSharedPointer>
 
 // Definition of Actor class methods
-Actor::Actor(std::string name, std::string character_played, std::string nconst, std::string photo_url, int birth_year, int death_year, int actor_importance, const std::string& n_role)
+Actor::Actor(std::string name, std::string character_played, std::string nconst, std::string photo_url, int birth_year, int death_year, int actor_importance)
         : _name(std::move(name)), _character_played(std::move(character_played)), _nconst(std::move(nconst)),
           _photo_url(std::move(photo_url)), _birth_year(birth_year), _death_year(death_year),
           _actor_importance(actor_importance) {
 
-    if (n_role == "actor") {
-        _n_role = Character::Actor;
-    } else if (n_role == "director") {
-        _n_role = Character::Director;
-    } else if (n_role == "producer") {
-        _n_role = Character::Producer;
-    }
 //    Logger::getInstance().logInfo("Actor class object was created (" + _name + ").");
 }
 
@@ -45,7 +38,7 @@ int Actor::getImportance() const {
     return _actor_importance;
 }
 
-const std::map<QSharedPointer<Movie>, Character>& Actor::getAllCharacters() const {
+const std::map<std::string, QSharedPointer<Movie>>& Actor::getAllCharacters() const {
     return _all_characters;
 }
 
@@ -53,31 +46,31 @@ bool compareMovies(const QSharedPointer<Movie>& movie1, const QSharedPointer<Mov
     return movie1->getTconst() == movie2->getTconst();
 }
 
-void Actor::addToMovie(const QSharedPointer<Movie>& movie) {
-    if (std::find_if(_movies.begin(), _movies.end(), [&movie](const QSharedPointer<Movie>& m) {
-        return compareMovies(m, movie); }) == _movies.end()) {
-        _movies.push_back(movie);
-        Logger::getInstance().logInfo("Actor`s movies list was updated. Actor " + _name + " was added to "
-                                      + movie->getName() + ".");
-
-        movie->addActor(QSharedPointer<Actor>(this));
-    } else {
-        Logger::getInstance().logWarning("Actor" + _name + " already in " + movie->getName() + ".");
-    }
-}
-
-void Actor::removeMovie(const QSharedPointer<Movie>& movie) {
-    auto it = std::find_if(_movies.begin(), _movies.end(), [&movie](const QSharedPointer<Movie>& m) {
-        return compareMovies(m, movie); });
-    if (it != _movies.end()) {
-        _movies.erase(it);
-        Logger::getInstance().logInfo("Movie " + movie->getName() + " was removed from actor's (" + _name + ") movies list.");
-
-        movie->removeActor(QSharedPointer<Actor>(this));
-    } else {
-        Logger::getInstance().logWarning("Actor " + _name + " didn't play in " + movie->getName() + ".");
-    }
-}
+// void Actor::addToMovie(const QSharedPointer<Movie>& movie) {
+//     if (std::find_if(_movies.begin(), _movies.end(), [&movie](const QSharedPointer<Movie>& m) {
+//         return compareMovies(m, movie); }) == _movies.end()) {
+//         _movies.push_back(movie);
+//         Logger::getInstance().logInfo("Actor`s movies list was updated. Actor " + _name + " was added to "
+//                                       + movie->getName() + ".");
+//
+//         movie->addActor(QSharedPointer<Actor>(this));
+//     } else {
+//         Logger::getInstance().logWarning("Actor" + _name + " already in " + movie->getName() + ".");
+//     }
+// }
+//
+// void Actor::removeMovie(const QSharedPointer<Movie>& movie) {
+//     auto it = std::find_if(_movies.begin(), _movies.end(), [&movie](const QSharedPointer<Movie>& m) {
+//         return compareMovies(m, movie); });
+//     if (it != _movies.end()) {
+//         _movies.erase(it);
+//         Logger::getInstance().logInfo("Movie " + movie->getName() + " was removed from actor's (" + _name + ") movies list.");
+//
+//         movie->removeActor(QSharedPointer<Actor>(this));
+//     } else {
+//         Logger::getInstance().logWarning("Actor " + _name + " didn't play in " + movie->getName() + ".");
+//     }
+// }
 
 // Definition of Movie class methods
 Movie::Movie(std::string name, std::string tconst, std::string description, std::string url, FilmType film_type,
@@ -94,10 +87,6 @@ std::string Movie::getName() const {
 
 std::string Movie::getTconst() const {
     return _tconst;
-}
-
-const std::vector<QSharedPointer<Actor>>& Movie::getActors() const {
-    return _actors;
 }
 
 void Movie::setGenre(const std::vector<std::string>& genres) {
@@ -150,18 +139,29 @@ bool compareActors(const QSharedPointer<Actor>& actor1, const QSharedPointer<Act
 }
 
 void Movie::loadActors() {
-    std::vector<std::map<std::string, std::string>> buf;
+    std::string query = "SELECT nt.n_role, nt.character_played, nt.nconst, nt.actor_importance, '' as photo_url, n.name, "
+                        "n.birth_year, n.death_year FROM names_titles nt JOIN names n on n.nconst = nt.nconst WHERE "
+                        "nt.tconst = '" + _tconst + "'";
+
+    std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
+
+    if (_actors.empty()) {
+        for (auto el: {"director", "actor", "producer"}) _actors[el] = {};
+    }
 
     int counter = 0;
     for (auto el: buf) {
         auto actor = QSharedPointer<Actor>::create(el.at("name"), el.at("character_played"),
                                                    el.at("nconst"), el.at("photo_url"),
                                                    std::stoi(el.at("birth_year")), std::stoi(el.at("death_year")),
-                                                   std::stoi(el.at("actor_importance")), el.at("n_role"));
+                                                   std::stoi(el.at("actor_importance")));
 
-        if (std::find_if(_actors.begin(), _actors.end(), [&actor](const QSharedPointer<Actor>& a) {
-            return compareActors(a, actor); }) == _actors.end()) {
-            _actors.push_back(actor);
+        if (std::find_if(_aboba.begin(), _aboba.end(), [&actor](const QSharedPointer<Actor>& a) {
+            return compareActors(a, actor); }) == _aboba.end()) {
+            _aboba.push_back(actor);
+            std::cout << el.at("n_role");
+            _actors[el.at("n_role")].push_back(actor);
+            std::cout << _actors[el.at("n_role")].size()<< '\n';
             counter++;
         }
         else {
@@ -172,56 +172,60 @@ void Movie::loadActors() {
     Logger::getInstance().logInfo(std::to_string(counter) + " actors was added to " + _name + ".");
 }
 
-void Movie::addActor(const QSharedPointer<Actor>& actor) {
-    if (std::find_if(_actors.begin(), _actors.end(), [&actor](const QSharedPointer<Actor>& a) {
-        return compareActors(a, actor); }) == _actors.end()) {
-        _actors.push_back(actor);
-        Logger::getInstance().logInfo("Movie`s actor list was updated. Actor " + actor->getName() +
-                                      " was added to " + _name + ".");
-
-        actor->addToMovie(QSharedPointer<Movie>(this));
-    } else {
-        Logger::getInstance().logWarning("Actor " + actor->getName() + " was already added.");
-    }
+std::map<std::string, std::vector<QSharedPointer<Actor>>>& Movie::getActors() {
+    return _actors;
 }
 
-void Movie::clearActors() {
-    for (auto& actor : _actors) {
-        actor.reset();
-    }
-    _actors.clear();
-
-    Logger::getInstance().logInfo("All actors were removed from " + _name + ".");
-}
-
-void Movie::removeActor(const QSharedPointer<Actor>& actor) {
-    auto it = std::find_if(_actors.begin(), _actors.end(), [&actor](const QSharedPointer<Actor>& a) {
-        return compareActors(a, actor); });
-    if (it != _actors.end()) {
-        _actors.erase(it);
-        Logger::getInstance().logInfo("Actor " + actor->getName() + " was removed from " + _name + ".");
-
-        actor->removeMovie(QSharedPointer<Movie>(this));
-    } else {
-        Logger::getInstance().logWarning("Movie " + _name + " doesn't have " + actor->getName() + " in the list of actors.");
-    }
-}
+// void Movie::addActor(const QSharedPointer<Actor>& actor) {
+//     if (std::find_if(_actors.begin(), _actors.end(), [&actor](const QSharedPointer<Actor>& a) {
+//         return compareActors(a, actor); }) == _actors.end()) {
+//         _actors.push_back(actor);
+//         Logger::getInstance().logInfo("Movie`s actor list was updated. Actor " + actor->getName() +
+//                                       " was added to " + _name + ".");
+//
+//         actor->addToMovie(QSharedPointer<Movie>(this));
+//     } else {
+//         Logger::getInstance().logWarning("Actor " + actor->getName() + " was already added.");
+//     }
+// }
+//
+// void Movie::clearActors() {
+//     for (auto& actor : _actors) {
+//         actor.reset();
+//     }
+//     _actors.clear();
+//
+//     Logger::getInstance().logInfo("All actors were removed from " + _name + ".");
+// }
+//
+// void Movie::removeActor(const QSharedPointer<Actor>& actor) {
+//     auto it = std::find_if(_actors.begin(), _actors.end(), [&actor](const QSharedPointer<Actor>& a) {
+//         return compareActors(a, actor); });
+//     if (it != _actors.end()) {
+//         _actors.erase(it);
+//         Logger::getInstance().logInfo("Actor " + actor->getName() + " was removed from " + _name + ".");
+//
+//         actor->removeMovie(QSharedPointer<Movie>(this));
+//     } else {
+//         Logger::getInstance().logWarning("Movie " + _name + " doesn't have " + actor->getName() + " in the list of actors.");
+//     }
+// }
 
 void Movie::loadComments() {
     std::string query = "SELECT * FROM comments WHERE tconst = '" + _tconst + "'";
     std::vector<std::map<std::string, std::string>> select = ExecuteSelectQuery("library", query);
 
     for (auto el: select) {
-        _comments.push_back(el["comment"]);
+        _comments.emplace_back(el["user_id"],el["comment"]);
     }
 }
 
-const std::vector<std::string>& Movie::getComments() const {
+const std::vector<std::pair<std::string, std::string>>& Movie::getComments() const {
     return _comments;
 }
 
-void Movie::leaveComment(const std::string& com) {
-    _comments.push_back(com);
+void Movie::leaveComment(const std::string& user_id, const std::string& com) {
+    _comments.emplace_back(user_id, com);
 }
 
 // Definition of Collection class methods

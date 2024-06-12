@@ -173,7 +173,7 @@ bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::strin
             {{"user_id", _login}, {"tconst", movie->getTconst()}, {"comment", com}}
     };
     if (ExecuteInsertQuery("library", "insert", "comments", data)) {
-        movie->leaveComment(com);
+        movie->leaveComment(_login, com);
         Logger::getInstance().logInfo(_login + " left a comment to " + movie->getName() + ".");
         return true;
     }

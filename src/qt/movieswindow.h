@@ -14,6 +14,7 @@
 #include "userprofilewindow.h"
 #include "genrewindow.h"
 #include "moviedetailwindow.h"
+#include "backend.h"
 
 class MoviesWindow : public QWidget {
     Q_OBJECT
@@ -24,7 +25,7 @@ public:
 
     private slots:
         void onUserProfileButtonClicked();
-    void onMovieButtonClicked(int movieId);
+    void onMovieButtonClicked(const QSharedPointer<Movie>& movie);
     void onGenreItemClicked(QListWidgetItem *item);
     void showMoviesWindow();
 

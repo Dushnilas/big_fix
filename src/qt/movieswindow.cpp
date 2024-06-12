@@ -75,7 +75,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
             QPushButton *movieButton = new QPushButton(this);
             movieButton->setIcon(QIcon(filmImage));
             movieButton->setIconSize(QSize(150, 150));
-            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+            connect(movieButton, &QPushButton::clicked, [this, i, movies_no_rec]() { onMovieButtonClicked(movies_no_rec[i]); });
 
             QLabel *movieTitle = new QLabel(QString::fromStdString(movies_no_rec[i]->getName()),this);
             movieTitle->setAlignment(Qt::AlignCenter);
@@ -94,7 +94,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
             QPushButton *movieButton = new QPushButton(this);
             movieButton->setIcon(QIcon(filmImage));
             movieButton->setIconSize(QSize(150, 150));
-            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+            connect(movieButton, &QPushButton::clicked, [this, i, movies_no_rec]() { onMovieButtonClicked(movies_no_rec[i]); });
 
             QLabel *movieTitle = new QLabel(QString::fromStdString(movies_no_rec[i]->getName()),this);
             movieTitle->setAlignment(Qt::AlignCenter);
@@ -116,7 +116,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
             QPushButton *movieButton = new QPushButton(this);
             movieButton->setIcon(QIcon(filmImage));
             movieButton->setIconSize(QSize(150, 150));
-            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+            connect(movieButton, &QPushButton::clicked, [this, i, movies_no_rec]() { onMovieButtonClicked(movies_no_rec[i]); });
 
             QLabel *movieTitle = new QLabel(QString::fromStdString(movies_cb_rec[i]->getName()),this);
             std::cout << movies_cb_rec[i]->getPhoto() << "\n";
@@ -136,7 +136,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
             QPushButton *movieButton = new QPushButton(this);
             movieButton->setIcon(QIcon(filmImage));
             movieButton->setIconSize(QSize(150, 150));
-            connect(movieButton, &QPushButton::clicked, [this, i]() { onMovieButtonClicked(i); });
+            connect(movieButton, &QPushButton::clicked, [this, i, movies_no_rec]() { onMovieButtonClicked(movies_no_rec[i]); });
 
             QLabel *movieTitle = new QLabel(QString::fromStdString(movies_user_rec[i]->getName()),this);
             movieTitle->setAlignment(Qt::AlignCenter);
@@ -199,12 +199,12 @@ void MoviesWindow::onUserProfileButtonClicked() {
     this->hide();
 }
 
-void MoviesWindow::onMovieButtonClicked(QSharedPointer<Movie>) {
-    qDebug() << "Movie clicked:" << movieId;
-    if (!movieDetailWindow) {
-        movieDetailWindow = new MovieDetailWindow(QString::number(movieId));
-        connect(movieDetailWindow, &MovieDetailWindow::backToPreviousWindow, this, &MoviesWindow::showMoviesWindow);
-    }
+void MoviesWindow::onMovieButtonClicked(const QSharedPointer<Movie>& movie) {
+    qDebug() << "Movie clicked:" << movie->getName();
+
+    delete movieDetailWindow;
+    movieDetailWindow = new MovieDetailWindow(movie);
+    connect(movieDetailWindow, &MovieDetailWindow::backToPreviousWindow, this, &MoviesWindow::showMoviesWindow);
     movieDetailWindow->show();
     this->hide();
 }

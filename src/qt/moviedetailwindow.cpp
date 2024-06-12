@@ -8,12 +8,14 @@
 #include <QCloseEvent>
 #include <QInputDialog>
 
-MovieDetailWindow::MovieDetailWindow(const QString &movieId, QWidget *parent)
-    : QWidget(parent), movieId(movieId), closed(false), userHasRated(false), userRating(0) { // Initialize closed and userHasRated here
+MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *parent)
+    : QWidget(parent), movie(mov), closed(false), userHasRated(false), userRating(0) {
+    movie->loadActors();
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     QHBoxLayout *topLayout = new QHBoxLayout();
-    titleLabel = new QLabel("Inception", this);
+    titleLabel = new QLabel(QString::fromStdString(movie->getName()), this);
     titleLabel->setAlignment(Qt::AlignLeft);
     QFont titleFont = titleLabel->font();
     titleFont.setPointSize(24);
@@ -41,8 +43,24 @@ MovieDetailWindow::MovieDetailWindow(const QString &movieId, QWidget *parent)
     middleLayout->addWidget(movieImageLabel);
 
     QVBoxLayout *infoLayout = new QVBoxLayout();
-    directorLabel = new QLabel("Director: Christopher Nolan", this);
-    actorsLabel = new QLabel("Actors: Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page", this);
+    std::cout << "directors " << movie->getActors()["director"].size() << '\n';
+    if (!movie->getActors()["director"].empty()) {
+        directorLabel = new QLabel(QString::fromStdString("Director: " + movie->getActors()["director"][0]->getName()), this);
+    }
+    else directorLabel = new QLabel(QString("Director: "), this);
+
+    std::cout << "Actors " << movie->getActors()["actor"].size() << '\n';
+    if (!movie->getActors()["actor"].empty()) {
+        QString buf = "Actors: ";
+        for (auto el: movie->getActors()["actor"]) {
+            buf += QString::fromStdString(el->getName()) + ", ";
+        }
+        actorsLabel = new QLabel(buf, this);
+    }
+    else actorsLabel = new QLabel(QString("Actors: "), this);
+
+    // directorLabel = new QLabel("Director: Christopher Nolan", this);
+    // actorsLabel = new QLabel("Actors: Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page", this);
     infoLayout->addWidget(directorLabel);
     infoLayout->addWidget(actorsLabel);
     middleLayout->addLayout(infoLayout);
@@ -50,8 +68,8 @@ MovieDetailWindow::MovieDetailWindow(const QString &movieId, QWidget *parent)
     mainLayout->addLayout(middleLayout);
 
     QVBoxLayout *ratingInfoLayout = new QVBoxLayout();
-    ratingLabel = new QLabel("Rating: 8.8", this);
-    votesLabel = new QLabel("(1,234,567 votes)", this);
+    ratingLabel = new QLabel(QString::fromStdString(std::to_string(movie->getRating())), this);
+    votesLabel = new QLabel(QString::fromStdString(std::to_string(movie->getVotes())), this);
     ratingInfoLayout->addWidget(ratingLabel);
     ratingInfoLayout->addWidget(votesLabel);
     mainLayout->addLayout(ratingInfoLayout);
@@ -114,7 +132,7 @@ MovieDetailWindow::MovieDetailWindow(const QString &movieId, QWidget *parent)
 
 void MovieDetailWindow::onBackButtonClicked() {
     emit backToPreviousWindow(); // Emit the signal before closing
-    this->close();
+    this->deleteLater();
 }
 
 void MovieDetailWindow::onAddToCollectionButtonClicked() {

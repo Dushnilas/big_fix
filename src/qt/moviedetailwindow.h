@@ -10,12 +10,13 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QScrollArea>
+#include "backend.h"
 
 class MovieDetailWindow : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MovieDetailWindow(const QString &movieId, QWidget *parent = nullptr);
+    explicit MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *parent = nullptr);
     bool isClosed() const;
 
     signals:
@@ -32,7 +33,7 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
-    QString movieId;
+    QSharedPointer<Movie> movie;
     QLabel *titleLabel;
     QLabel *directorLabel;
     QLabel *actorsLabel;
