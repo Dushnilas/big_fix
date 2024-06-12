@@ -4,6 +4,8 @@
 #include <vector>
 #include "../movie/movies.h"
 #include "user_and_dev.h"
+
+#include "../../../backend.h"
 #include "../logger/logger.h"
 #include "../../mysql-queries/mysql-queries.h"
 
@@ -133,18 +135,29 @@ bool AllUsers::removeCol(const QSharedPointer<Collection>& collection) {
     return false;
 }
 
-void AllUsers::createCol(const std::string& name) {
+bool AllUsers::createCol(const std::string& name, const std::string& photo_url) {
     for (const auto& el: _all_collection){
         if (el->getName() == name){
             std::cout << "Collection with that name already exists" << '\n';
             Logger::getInstance().logWarning("Can`t create collection with same name");
-            return;
+            return false;
         }
     }
-    int id = 0;
-    auto newCollection = QSharedPointer<Collection>::create(id, name);
+
+    std::string query = "SELECT MAX(collection_id) as max FROM user_collections";
+    std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
+
+    auto newCollection = QSharedPointer<Collection>::create(std::stoi(buf[0].at("max")) + 1, name);
+    newCollection->setPhoto(photo_url);
     _all_collection.push_back(newCollection);
-    Logger::getInstance().logInfo("Collection " + name + " was created by " + _name);
+
+    std::vector<std::map<std::string, std::string>> data = {
+        {{"collection_name", newCollection->getName()}, {"user_id", _login},
+            {"image_url", newCollection->getPhoto()}}};
+
+    ExecuteInsertQuery("library", "insert", "user_collections", data);
+    Logger::getInstance().logInfo("Collection " + newCollection->getName() + " was created by " + _name);
+    return true;
 }
 
 bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::string& com) {

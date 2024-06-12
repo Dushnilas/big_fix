@@ -25,6 +25,8 @@ private:
     QLineEdit *nameEdit;
     QButtonGroup *buttonGroup;
     QString selectedImagePath;
+    QPushButton *selectedButton;
+    void updateButtonStyles();
 };
 
 #endif // COLLECTIONDIALOG_H

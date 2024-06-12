@@ -111,13 +111,17 @@ class Collection {
 private:
     std::vector<QSharedPointer<Movie>> _collection;
     std::string _name;
-    std::string _photo_utl;
+    std::string _photo_url;
     int _collection_id;
 
 public:
     Collection(int collection_id, const std::string& name="Collection");
 
     std::string getName() const;
+    void setName(const std::string& name);
+    std::string getId() const;
+    std::string getPhoto() const;
+    void setPhoto(const std::string& url);
     const std::vector<QSharedPointer<Movie>>& getMovies() const;
     void addMovie(const QSharedPointer<Movie>& movie);
     void removeMovie(const QSharedPointer<Movie>& movie);

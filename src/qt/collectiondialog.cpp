@@ -1,9 +1,10 @@
 #include "collectiondialog.h"
 #include <QMessageBox>
 #include <QPixmap>
+#include "backend.h"
 
 CollectionDialog::CollectionDialog(QWidget *parent)
-    : QDialog(parent), selectedImagePath("")
+    : QDialog(parent), selectedImagePath(""), selectedButton(nullptr)
 {
     setWindowTitle("Add Collection");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -20,7 +21,7 @@ CollectionDialog::CollectionDialog(QWidget *parent)
     QHBoxLayout *imagesLayout = new QHBoxLayout();
 
     for (int i = 1; i <= 6; ++i) {
-        QString imagePath = QString("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/collection_image_%1.jpg").arg(i);
+        QString imagePath = QString(qFilePath("/pictures/collection_image_%1.jpg")).arg(i);
         QPixmap pixmap(imagePath);
 
         QPushButton *imageButton = new QPushButton(this);
@@ -56,5 +57,22 @@ QString CollectionDialog::getSelectedImagePath() const
 
 void CollectionDialog::onImageButtonClicked(int id)
 {
-    selectedImagePath = QString("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/collection_image_%1.jpg").arg(id);
+    selectedImagePath = QString(qFilePath("/pictures/collection_image_%1.jpg")).arg(id);
+    selectedButton = qobject_cast<QPushButton*>(buttonGroup->button(id));
+    updateButtonStyles();
+}
+
+void CollectionDialog::updateButtonStyles()
+{
+    QList<QAbstractButton*> buttons = buttonGroup->buttons();
+    for (QAbstractButton *button : buttons) {
+        QPushButton *pushButton = qobject_cast<QPushButton*>(button);
+        if (pushButton) {
+            if (pushButton == selectedButton) {
+                pushButton->setStyleSheet("border: 2px solid blue;");
+            } else {
+                pushButton->setStyleSheet("");
+            }
+        }
+    }
 }

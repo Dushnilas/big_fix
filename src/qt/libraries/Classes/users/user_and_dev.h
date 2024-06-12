@@ -50,7 +50,7 @@ public:
     void loadCol();
     void clearCol();
     const std::vector<QSharedPointer<Collection>>& getAllCol() const;
-    void createCol(const std::string& name);
+    bool createCol(const std::string& name, const std::string& photo_url);
     bool removeCol(const QSharedPointer<Collection>& collection);
 
     bool leaveComment(const QSharedPointer<Movie>& movie, const std::string& com);

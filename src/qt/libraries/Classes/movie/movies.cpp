@@ -234,6 +234,27 @@ std::string Collection::getName() const {
     return _name;
 }
 
+void Collection::setName(const std::string& name) {
+    _name = name;
+
+    ExecuteUpdateQuery("library", "UPDATE user_collections SET collection_name = '" + _name + "' WHERE collection_id = '" + std::to_string(_collection_id) + "';");
+
+    Logger::getInstance().logInfo("Collection " + std::to_string(_collection_id) + " changed name to " + _name + ".");
+}
+std::string Collection::getId() const {
+    return std::to_string(_collection_id);
+}
+std::string Collection::getPhoto() const {
+    return _photo_url;
+}
+void Collection::setPhoto(const std::string& url) {
+    _photo_url = url;
+
+    ExecuteUpdateQuery("library", "UPDATE user_collections SET image_url = '" + _photo_url + "' WHERE collection_id = '" + std::to_string(_collection_id) + "';");
+
+    Logger::getInstance().logInfo("Collection " + std::to_string(_collection_id) + " changed photo to " + _photo_url + ".");
+}
+
 const std::vector<QSharedPointer<Movie>>& Collection::getMovies() const {
     return _collection;
 }

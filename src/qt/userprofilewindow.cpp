@@ -9,14 +9,18 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
+
+
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
 {
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
 
+    main_user->loadCol();
+
     photoLabel = new QLabel(this);
-    QPixmap userPhoto("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/user_photo.jpg");
+    QPixmap userPhoto(qFilePath("src/qt/pictures/user_photo.jpg"));
     photoLabel->setPixmap(userPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     photoLabel->setFixedSize(200, 200);
     photoLabel->setStyleSheet("border: 1px solid black;");
@@ -61,8 +65,8 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
 
     QStringList collectionNames = {"Liked", "Watch Later"};
     QStringList collectionLogos = {
-        "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/liked_logo.jpg",
-        "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/watch_later_logo.jpg"
+        qFilePath("/pictures/liked_logo.jpg"),
+        qFilePath("/pictures/watch_later_logo.jpg")
     };
 
     for (int i = 0; i < collectionNames.size(); ++i) {
@@ -183,6 +187,11 @@ void UserProfileWindow::onAddCollectionClicked()
         QString collectionName = dialog.getCollectionName();
         QString imagePath = dialog.getSelectedImagePath();
 
+        if (collectionName.isEmpty()) {
+            QMessageBox::warning(this, tr("Invalid Name"), tr("Collection name cannot be empty."));
+            return;
+        }
+
         if (collectionName.length() > 30) {
             QMessageBox::warning(this, tr("Invalid Name"), tr("Collection name must be 30 characters or less."));
             return;
@@ -193,7 +202,14 @@ void UserProfileWindow::onAddCollectionClicked()
             return;
         }
 
-        // Add new collection button to the layout
+        bool create_col_status = main_user->createCol(collectionName.toStdString(), imagePath.toStdString());
+
+        if (!create_col_status) {
+            QMessageBox::warning(this, tr("Duplicate detected"), tr("Collection with this name already exists."));
+            return;
+        }
+
+
         QPushButton *collectionButton = new QPushButton(this);
         collectionButton->setIcon(QIcon(imagePath));
         collectionButton->setIconSize(QSize(150, 150));

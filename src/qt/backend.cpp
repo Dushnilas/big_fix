@@ -3,9 +3,16 @@
 #include <algorithm>
 #include <iomanip>
 #include "backend.h"
+#include "QString"
 
 std::vector<QSharedPointer<Movie>> all_movies;
+std::string MY_PATH = "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt";
 QSharedPointer<AllUsers> main_user;
+
+QString qFilePath(const std::string& path) {
+    return QString::fromStdString(MY_PATH + path);
+}
+
 
 FilmType strToType(const std::string& type){
     if (type == "Movie") return FilmType::Movie;
@@ -29,7 +36,7 @@ void loadMovies() {
     query = "SELECT t.title_name, t.tconst, t.description, t.title_type, t.year_start, t.year_end, t.is_adult, r.rating, "
             "r.num_votes, tl.image_url FROM titles t JOIN ratings r ON t.tconst = r.tconst JOIN titles_image tl on "
             "t.tconst = tl.tconst WHERE t.description IS NOT NULL AND t.description != '' AND t.year_start > 1950 AND "
-            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 10000;";
+            "r.num_votes > 200 ORDER BY r.num_votes DESC LIMIT 1000;";
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
 
     int counter = 0;

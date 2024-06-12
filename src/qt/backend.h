@@ -11,7 +11,10 @@
 #include "libraries/mysql-queries/mysql-queries.h"
 
 extern  QSharedPointer<AllUsers> main_user;
+extern std::string MY_PATH;
 extern  std::vector<QSharedPointer<Movie>> all_movies;
+
+QString qFilePath(const std::string& path);
 
 FilmType strToType(const std::string& type);
 

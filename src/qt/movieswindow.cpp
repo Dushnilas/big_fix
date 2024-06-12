@@ -18,7 +18,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
 
     QHBoxLayout *topBarLayout = new QHBoxLayout();
     logoLabel = new QLabel(this);
-    QPixmap logoPixmap("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/logo.jpg");
+    QPixmap logoPixmap( qFilePath("/pictures/logo.jpg"));
     logoLabel->setPixmap(logoPixmap.scaled(150, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     logoLabel->setFixedSize(150, 50);
 
@@ -49,7 +49,7 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
     moviesContainer2 = new QWidget(moviesArea2);
     QHBoxLayout *moviesLayout2 = new QHBoxLayout(moviesContainer2);
 
-    QPixmap filmImage("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/pictures/brand_new_icon.jpg");
+    QPixmap filmImage(qFilePath("/pictures/brand_new_icon.jpg"));
 
     std::vector<QSharedPointer<Movie>> movies_no_rec;
     std::vector<QSharedPointer<Movie>> movies_cb_rec;
