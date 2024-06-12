@@ -199,7 +199,7 @@ void MoviesWindow::onUserProfileButtonClicked() {
     this->hide();
 }
 
-void MoviesWindow::onMovieButtonClicked(int movieId) {
+void MoviesWindow::onMovieButtonClicked(QSharedPointer<Movie>) {
     qDebug() << "Movie clicked:" << movieId;
     if (!movieDetailWindow) {
         movieDetailWindow = new MovieDetailWindow(QString::number(movieId));
