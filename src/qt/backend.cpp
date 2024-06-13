@@ -6,7 +6,7 @@
 #include "QString"
 
 std::vector<QSharedPointer<Movie>> all_movies;
-std::string MY_PATH = "/Users/anastasiaseraa/dev/src/qt";
+std::string MY_PATH = "/Users/senya/CLionProjects/aoaoaoaooa/src/qt";
 QSharedPointer<AllUsers> main_user;
 
 QString qFilePath(const std::string& path) {
@@ -105,10 +105,12 @@ bool compareMovies(const QSharedPointer<Movie>& m1, const QSharedPointer<Movie>&
     return m1->getName().length() < m2->getName().length();
 }
 
-void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string& query, int n) {
+void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string& query, int n, const std::string& genre) {
     for (const auto& movie : all_movies) {
-        if (movie->getName().find(query) != std::string::npos) {
-            result.push_back(movie);
+        if (genre.empty() or std::find(movie->getGenre().begin(), movie->getGenre().end(), genre) != movie->getGenre().end()) {
+            if (movie->getName().find(query) != std::string::npos) {
+                result.push_back(movie);
+            }
         }
     }
 
@@ -205,7 +207,7 @@ void getRecommendation(std::vector<QSharedPointer<Movie>>& buf,
 
 std::vector<std::string> GetGenres(const std::string& library) {
     std::vector<std::string> genres;
-    std::string query = "SELECT DISTINCT genre_name FROM genres WHERE genre_name != 'Adult' ORDER BY genre_name;";  // SQL-запрос для получения всех жанров
+    std::string query = "SELECT DISTINCT genre_name FROM genres WHERE genre_name != 'Adult' ORDER BY genre_name;";
     std::vector<std::map<std::string, std::string>> results = ExecuteSelectQuery(library, query);
 
     for (const auto& row : results) {
