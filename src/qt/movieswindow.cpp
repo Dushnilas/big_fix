@@ -202,7 +202,7 @@ void MoviesWindow::onUserProfileButtonClicked() {
 void MoviesWindow::onMovieButtonClicked(const QSharedPointer<Movie>& movie) {
     qDebug() << "Movie clicked:" << movie->getName();
 
-    delete movieDetailWindow;
+//    delete movieDetailWindow;
     movieDetailWindow = new MovieDetailWindow(movie);
     connect(movieDetailWindow, &MovieDetailWindow::backToPreviousWindow, this, &MoviesWindow::showMoviesWindow);
     movieDetailWindow->show();

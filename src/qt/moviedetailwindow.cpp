@@ -7,10 +7,16 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QInputDialog>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QMessageBox>
 
 MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *parent)
-    : QWidget(parent), movie(mov), closed(false), userHasRated(false), userRating(0) {
+        : QWidget(parent), movie(mov), closed(false), userHasRated(false), userRating(0) {
     movie->loadActors();
+
+    networkManager = new QNetworkAccessManager(this);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
@@ -38,16 +44,20 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
 
     QHBoxLayout *middleLayout = new QHBoxLayout();
     movieImageLabel = new QLabel(this);
-    QPixmap movieImagePixmap("/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/film_image.jpg");
-    movieImageLabel->setPixmap(movieImagePixmap.scaled(200, 300, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QUrl imageUrl(QString::fromStdString(movie->getPhoto()));
+    QNetworkRequest request(imageUrl);
+    connect(networkManager, &QNetworkAccessManager::finished, this, &MovieDetailWindow::onImageDownloaded);
+    networkManager->get(request);
+
     middleLayout->addWidget(movieImageLabel);
 
     QVBoxLayout *infoLayout = new QVBoxLayout();
     std::cout << "directors " << movie->getActors()["director"].size() << '\n';
     if (!movie->getActors()["director"].empty()) {
         directorLabel = new QLabel(QString::fromStdString("Director: " + movie->getActors()["director"][0]->getName()), this);
+    } else {
+        directorLabel = new QLabel(QString("Director: "), this);
     }
-    else directorLabel = new QLabel(QString("Director: "), this);
 
     std::cout << "Actors " << movie->getActors()["actor"].size() << '\n';
     if (!movie->getActors()["actor"].empty()) {
@@ -55,12 +65,17 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
         for (auto el: movie->getActors()["actor"]) {
             buf += QString::fromStdString(el->getName()) + ", ";
         }
-        actorsLabel = new QLabel(buf, this);
-    }
-    else actorsLabel = new QLabel(QString("Actors: "), this);
+        buf.chop(2);
 
-    // directorLabel = new QLabel("Director: Christopher Nolan", this);
-    // actorsLabel = new QLabel("Actors: Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page", this);
+        actorsLabel = new QLabel(buf, this);
+        actorsLabel->setWordWrap(true);
+        actorsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    } else {
+        actorsLabel = new QLabel(QString("Actors: "), this);
+        actorsLabel->setWordWrap(true);
+        actorsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    }
+
     infoLayout->addWidget(directorLabel);
     infoLayout->addWidget(actorsLabel);
     middleLayout->addLayout(infoLayout);
@@ -148,11 +163,19 @@ void MovieDetailWindow::showCollectionDialog() {
 }
 
 void MovieDetailWindow::onWatchLaterButtonClicked() {
-    qDebug() << "Added to Watch Later";
+    if (!main_user->addToCol("Watch later", movie)) {
+        QMessageBox::warning(this, "Warning", "This movie is already in your Watch Later collection.");
+    } else {
+        qDebug() << "Added to Watch Later";
+    }
 }
 
 void MovieDetailWindow::onLikeMovieButtonClicked() {
-    qDebug() << "Liked the movie";
+    if (!main_user->addToCol("Liked", movie)) {
+        QMessageBox::warning(this, "Warning", "This movie is already in your Liked collection.");
+    } else {
+        qDebug() << "Liked the movie";
+    }
 }
 
 void MovieDetailWindow::onAddCommentButtonClicked() {
@@ -163,6 +186,18 @@ void MovieDetailWindow::onAddCommentButtonClicked() {
         commentLineEdit->clear();
         qDebug() << "Added comment:" << comment;
     }
+}
+
+void MovieDetailWindow::onImageDownloaded(QNetworkReply* reply) {
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray imageData = reply->readAll();
+        QPixmap pixmap;
+        pixmap.loadFromData(imageData);
+        movieImageLabel->setPixmap(pixmap.scaled(200, 300, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    } else {
+        qDebug() << "Error downloading image:" << reply->errorString();
+    }
+    reply->deleteLater();
 }
 
 void MovieDetailWindow::addComment(const QString &commentText, const QString &userId) {
@@ -185,10 +220,30 @@ void MovieDetailWindow::addComment(const QString &commentText, const QString &us
 }
 
 void MovieDetailWindow::updateUserRating(int rating) {
-    userRating = rating;
-    userHasRated = true;
+    if (userHasRated) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Change Rating", "Are you sure you want to change your rating?",
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::No) {
+            return;
+        }
+
+        main_user->makeVote(movie, rating, false, userRating);
+        userRating = rating;
+    } else {
+        userHasRated = true;
+
+        main_user->makeVote(movie, rating);
+        userRating = rating;
+    }
+
     userRatingLabel->setText(QString("Your rating: %1").arg(userRating));
     userRatingLabel->setVisible(true);
+
+    ratingLabel->setText(QString::number(movie->getRating()));
+    votesLabel->setText(QString::number(movie->getVotes()));
+
+    qDebug() << "User rated the film:" << rating;
 }
 
 bool MovieDetailWindow::isClosed() const {

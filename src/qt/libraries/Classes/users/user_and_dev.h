@@ -49,12 +49,13 @@ private:
 public:
     void loadCol();
     void clearCol();
+    bool addToCol(const std::string& col, const QSharedPointer<Movie>& movie);
     const std::vector<QSharedPointer<Collection>>& getAllCol() const;
     bool createCol(const std::string& name, const std::string& photo_url);
     bool removeCol(const QSharedPointer<Collection>& collection);
 
     bool leaveComment(const QSharedPointer<Movie>& movie, const std::string& com);
-    void makeVote(const QSharedPointer<Movie>& movie, int vote);
+    void makeVote(const QSharedPointer<Movie>& movie, int vote, bool status=true, int user_rating=0);
 };
 
 #endif

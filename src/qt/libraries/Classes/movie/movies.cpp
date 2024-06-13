@@ -4,6 +4,8 @@
 #include "../logger/logger.h"
 #include "../../mysql-queries/mysql-queries.h"
 #include <QSharedPointer>
+#include "../../../backend.h"
+
 
 // Definition of Actor class methods
 Actor::Actor(std::string name, std::string character_played, std::string nconst, std::string photo_url, int birth_year, int death_year, int actor_importance)
@@ -129,9 +131,12 @@ int Movie::getVotes() const {
     return _num_votes;
 }
 
-void Movie::updateRating(double new_vote) {
-    _rating = (_rating * _num_votes + new_vote) / (_num_votes + 1);
-    _num_votes++;
+void Movie::updateRating(int new_vote, bool status, int user_rating) {
+    if (status) {
+        _rating = (_rating * _num_votes + new_vote) / (_num_votes + 1);
+        _num_votes++;
+    }
+    else _rating = ((_rating * _num_votes) - user_rating + new_vote) / _num_votes;
 }
 
 bool compareActors(const QSharedPointer<Actor>& actor1, const QSharedPointer<Actor>& actor2) {
@@ -259,19 +264,38 @@ void Collection::setPhoto(const std::string& url) {
     Logger::getInstance().logInfo("Collection " + std::to_string(_collection_id) + " changed photo to " + _photo_url + ".");
 }
 
+void Collection::loadMovies(const std::vector<std::string>& tconsts){
+    for (const auto& el: tconsts){
+        auto it = std::find_if(all_movies.begin(), all_movies.end(), [&el](const QSharedPointer<Movie>& m) {
+            return m->getTconst() == el; });
+
+        _collection.push_back(all_movies[it - all_movies.begin()]);
+    }
+}
+
 const std::vector<QSharedPointer<Movie>>& Collection::getMovies() const {
     return _collection;
 }
 
-void Collection::addMovie(const QSharedPointer<Movie>& movie) {
-    _collection.push_back(movie);
-    std::vector<std::map<std::string, std::string>> data = {
-        {{"collection_id", std::to_string(_collection_id)}, {"tconst", movie->getTconst()}},
-};
-    if (ExecuteInsertQuery("library", "insert", "titles_collections", data)) {
-        Logger::getInstance().logInfo("Movie " + movie->getTconst() + " was added to collection " + std::to_string(_collection_id) + '.');
+bool Collection::addMovie(const QSharedPointer<Movie>& movie) {
+    if (std::find(_collection.begin(), _collection.end(), movie) == _collection.end()) {
+
+        _collection.push_back(movie);
+        std::vector<std::map<std::string, std::string>> data = {
+                {{"collection_id", std::to_string(_collection_id)}, {"tconst", movie->getTconst()}},
+        };
+        if (ExecuteInsertQuery("library", "insert", "titles_collections", data)) {
+            Logger::getInstance().logInfo(
+                    "Movie " + movie->getTconst() + " was added to collection " + std::to_string(_collection_id) + '.');
+            return true;
+        }
+
+        Logger::getInstance().logError(
+                "Movie " + movie->getTconst() + " can`t be added to collection " + std::to_string(_collection_id) +
+                '.');
+        return false;
     }
-    else Logger::getInstance().logError("Movie " + movie->getTconst() + " can`t be added to collection " + std::to_string(_collection_id) + '.');
+    return false;
 }
 
 void Collection::removeMovie(const QSharedPointer<Movie>& movie) {

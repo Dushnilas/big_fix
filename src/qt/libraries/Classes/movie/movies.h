@@ -79,7 +79,7 @@ public:
     double getRating() const;
     int getVotes() const;
 
-    void updateRating(double new_vote);
+    void updateRating(int new_vote, bool status, int user_rating);
 
 private:
     std::vector<QSharedPointer<Actor>> _aboba;
@@ -116,8 +116,9 @@ public:
     std::string getId() const;
     std::string getPhoto() const;
     void setPhoto(const std::string& url);
+    void loadMovies(const std::vector<std::string>& tconsts);
     const std::vector<QSharedPointer<Movie>>& getMovies() const;
-    void addMovie(const QSharedPointer<Movie>& movie);
+    bool addMovie(const QSharedPointer<Movie>& movie);
     void removeMovie(const QSharedPointer<Movie>& movie);
 };
 

@@ -1,7 +1,6 @@
 #include "signupwindow.h"
 #include "movieswindow.h"
 #include "backend.h"
-#include "/Users/maykorablina/Yandex.Disk.localized/CodingProjects/big_fix_3/src/qt/libraries/Classes/users/genders.h"
 #include <QMessageBox>
 #include <iostream>
 

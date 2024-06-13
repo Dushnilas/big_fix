@@ -10,24 +10,28 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QScrollArea>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QUrl>
 #include "backend.h"
 
 class MovieDetailWindow : public QWidget {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     explicit MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *parent = nullptr);
     bool isClosed() const;
 
-    signals:
-        void backToPreviousWindow();
+signals:
+    void backToPreviousWindow();
 
-    private slots:
-        void onBackButtonClicked();
+private slots:
+    void onBackButtonClicked();
     void onAddToCollectionButtonClicked();
     void onWatchLaterButtonClicked();
     void onLikeMovieButtonClicked();
     void onAddCommentButtonClicked();
+    void onImageDownloaded(QNetworkReply* reply);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -51,6 +55,7 @@ private:
     bool closed;
     bool userHasRated;
     int userRating;
+    QNetworkAccessManager *networkManager;
 
     void showCollectionDialog();
     void addComment(const QString &commentText, const QString &userId);

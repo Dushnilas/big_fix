@@ -128,6 +128,7 @@ bool SignIn(const std::string &login, const std::string &password) {
             std::cout << el.at("name") << '\n';
             main_user = QSharedPointer<AllUsers>::create(el.at("name"), login, password, std::stoi(el.at("age")),
                 el.at("photo_url"), el.at("gender"));
+            main_user->loadCol();
             Logger::getInstance().logError("User " + login + " signed in.");
             return true;
         }

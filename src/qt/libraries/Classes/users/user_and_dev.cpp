@@ -108,6 +108,16 @@ void AllUsers::loadCol() {
 
         if (std::find_if(_all_collection.begin(), _all_collection.end(), [&col](const QSharedPointer<Collection>& c) {
             return compareCol(c, col); }) == _all_collection.end()) {
+
+            query = "SELECT tconst from titles_collections where collection_id = '" + col->getId() + "'";
+            std::vector<std::map<std::string, std::string>> arr = ExecuteSelectQuery("library", query);
+
+            std::vector<std::string> tconsts;
+            for (auto el: arr) tconsts.push_back(el.at("tconst"));
+
+            col->loadMovies(tconsts);
+            std::cout << col->getMovies().size() << " Movies in " << col->getName() << "\n";
+
             _all_collection.push_back(col);
             counter++;
         }
@@ -127,6 +137,16 @@ void AllUsers::clearCol() {
     _all_collection.clear();
 
     Logger::getInstance().logInfo("All movies were removed from " + _name + ".");
+}
+
+bool AllUsers::addToCol(const std::string& col, const QSharedPointer<Movie>& movie){
+    for (const auto& el: _all_collection){
+        if (col == el->getName()){
+            return el->addMovie(movie);
+        }
+    }
+
+    return false;
 }
 
 bool AllUsers::removeCol(const QSharedPointer<Collection>& collection) {
@@ -182,10 +202,7 @@ bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::strin
     return false;
 }
 
-void AllUsers::makeVote(const QSharedPointer<Movie>& movie, int vote){
-    if (0 <= vote and vote <= 10){
-        movie->updateRating(vote);
-        Logger::getInstance().logInfo("Movie (" + movie->getName() + ") rating update.");
-    }
-    else Logger::getInstance().logError("New vote for " + movie->getName() + "isn`t from diapason of 0-10.");
+void AllUsers::makeVote(const QSharedPointer<Movie>& movie, int vote, bool status, int user_rating){
+    movie->updateRating(vote, status, user_rating);
+    Logger::getInstance().logInfo("Movie (" + movie->getName() + ") rating update.");
 }
