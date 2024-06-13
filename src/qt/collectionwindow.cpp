@@ -7,16 +7,22 @@
 #include <QDir>
 #include <QLabel>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include "moviedetailwindow.h"
+#include "backend.h" // Включите ваш заголовочный файл backend, если это необходимо
+#include <QImageReader>
 
-CollectionWindow::CollectionWindow(const QSharedPointer<Collection>& collection, QWidget *parent)
-        : QWidget(parent), collection(collection)
-{
+CollectionWindow::CollectionWindow(const QSharedPointer<Collection>& col, QWidget *parent)
+        : QWidget(parent), collection(col), networkManager(new QNetworkAccessManager(this)) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     QHBoxLayout *topLayout = new QHBoxLayout();
 
     collectionPhotoLabel = new QLabel(this);
-    QPixmap collectionPhoto(qFilePath("src/qt/pictures/default_collection.jpg")); // Placeholder image
+    QPixmap collectionPhoto(QString::fromStdString(MY_PATH + collection->getPhoto()));
     collectionPhotoLabel->setPixmap(collectionPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     collectionPhotoLabel->setFixedSize(200, 200);
     collectionPhotoLabel->setStyleSheet("border: 1px solid black;");
@@ -47,100 +53,106 @@ CollectionWindow::CollectionWindow(const QSharedPointer<Collection>& collection,
     moviesArea = new QScrollArea(this);
     moviesArea->setWidgetResizable(true);
     moviesContainer = new QWidget(moviesArea);
-    moviesLayout = new QVBoxLayout(moviesContainer);
+    moviesLayout = new QHBoxLayout(moviesContainer);
 
-    loadMovies();
+    loadColMovies();
 
     moviesContainer->setLayout(moviesLayout);
     moviesArea->setWidget(moviesContainer);
     mainLayout->addWidget(moviesArea);
 
-    backButton = new QPushButton("Back", this);
+    backButton = new QPushButton("Back");
     connect(backButton, &QPushButton::clicked, this, &CollectionWindow::onBackButtonClicked);
     mainLayout->addWidget(backButton);
 
     setLayout(mainLayout);
 
     setStyleSheet(
-        "CollectionWindow {"
-        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
-        "    color: white;"
-        "}"
-        "QLabel {"
-        "    color: rgb(229, 217, 190);"
-        "}"
-        "QPushButton {"
-        "    background-color: rgba(255, 255, 255, 0);"
-        "    color: rgb(229, 217, 190);"
-        "    border: 5px solid rgb(229, 217, 190);"
-        "    border-radius: 5px;"
-        "    padding: 5px;"
-        "}"
-        );
+            "CollectionWindow {"
+            "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+            "    color: white;"
+            "}"
+            "QLabel {"
+            "    color: rgb(229, 217, 190);"
+            "}"
+            "QPushButton {"
+            "    background-color: rgba(255, 255, 255, 0);"
+            "    color: rgb(229, 217, 190);"
+            "    padding: 5px;"
+            "}"
+    );
     setWindowTitle("Collection: " + QString::fromStdString(collection->getName()));
-    setFixedSize(800, 600);
+    setMinimumSize(1024, 768);
+    resize(1280, 720);
 }
 
-CollectionWindow::~CollectionWindow() {}
+CollectionWindow::~CollectionWindow() {
+    std::cout << "Aboba2" << '\n';
+    delete networkManager;
+    std::cout << "Aboba3" << '\n';
+}
 
-void CollectionWindow::onBackButtonClicked()
-{
+void CollectionWindow::onBackButtonClicked() {
     emit backToUserProfile();
-    this->deleteLater();
+    close();
+    std::cout << "Aboba1" << '\n';
 }
 
-void CollectionWindow::onChangeCollectionNameClicked()
-{
+void CollectionWindow::onChangeCollectionNameClicked() {
     if (collectionNameEdit->isVisible()) {
-        // Save new name
         QString newName = collectionNameEdit->text();
         if (!newName.isEmpty()) {
             collectionNameLabel->setText(newName);
             collection->setName(newName.toStdString());
+            emit collectionNameUpdated(newName);
         }
         collectionNameEdit->setVisible(false);
         collectionNameLabel->setVisible(true);
     } else {
-        // Edit name
         collectionNameEdit->setVisible(true);
         collectionNameLabel->setVisible(false);
     }
 }
 
-void CollectionWindow::onChangeCollectionPhotoClicked()
-{
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Select Photo"), "", tr("Images (*.png *.xpm *.jpg *.jpeg)"));
-    if (!filePath.isEmpty()) {
-        QFileInfo fileInfo(filePath);
-        QString fileName = fileInfo.fileName();
-        QString targetDir = "src/qt/pictures/";
-        QString targetPath = targetDir + fileName;
-
-        QDir dir(targetDir);
-        if (!dir.exists()) {
-            dir.mkpath(".");
-        }
-
-        if (QFile::copy(filePath, targetPath)) {
-            QPixmap collectionPhoto(targetPath);
-            collectionPhotoLabel->setPixmap(collectionPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-            collection->setPhoto(targetPath.toStdString());
-        } else {
-            QMessageBox::warning(this, tr("Copy Failed"), tr("Failed to copy the photo to the target directory."));
-        }
-    }
+void CollectionWindow::onChangeCollectionPhotoClicked() {
+//    QString filePath = QFileDialog::getOpenFileName(this, tr("Select Photo"), "", tr("Images (*.png *.xpm *.jpg *.jpeg)"));
+//    if (!filePath.isEmpty()) {
+//        QFileInfo fileInfo(filePath);
+//        QString fileName = fileInfo.fileName();
+//        QString targetDir = "src/qt/pictures/";
+//        QString targetPath = targetDir + fileName;
+//
+//        QDir dir(targetDir);
+//        if (!dir.exists()) {
+//            dir.mkpath(".");
+//        }
+//
+//        QImageReader reader(filePath);
+//        reader.setAutoTransform(true);
+//        QImage newImage = reader.read();
+//        if (newImage.isNull()) {
+//            QMessageBox::warning(this, tr("Load Failed"), tr("Failed to load the image."));
+//            return;
+//        }
+//
+//        QImage scaledImage = newImage.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//        if (scaledImage.save(targetPath)) {
+//            collectionPhotoLabel->setPixmap(QPixmap::fromImage(scaledImage));
+//            collection->setPhoto(targetPath.toStdString());
+//        } else {
+//            QMessageBox::warning(this, tr("Copy Failed"), tr("Failed to copy the photo to the target directory."));
+//        }
+//    }
 }
 
-void CollectionWindow::onDeleteMovieClicked(const QSharedPointer<Movie> &movie)
-{
+void CollectionWindow::onDeleteMovieClicked(const QSharedPointer<Movie> &movie) {
     if (QMessageBox::question(this, tr("Delete Movie"), tr("Are you sure you want to delete this movie?")) == QMessageBox::Yes) {
         collection->removeMovie(movie);
-        loadColMovies(); // Reload movies after deletion
+        loadColMovies();
     }
 }
 
-void CollectionWindow::loadColMovies()
-{
+void CollectionWindow::loadColMovies() {
     QLayoutItem *child;
     while ((child = moviesLayout->takeAt(0)) != nullptr) {
         delete child->widget();
@@ -151,21 +163,53 @@ void CollectionWindow::loadColMovies()
     for (const auto &movie : movies) {
         addMovieToLayout(movie, moviesLayout);
     }
+
+    if (movies.size() < 5) {
+        QSpacerItem *spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        moviesLayout->addItem(spacer);
+    }
 }
 
-void CollectionWindow::addMovieToLayout(const QSharedPointer<Movie> &movie, QVBoxLayout *layout)
-{
-    QHBoxLayout *movieLayout = new QHBoxLayout();
+void CollectionWindow::addMovieToLayout(const QSharedPointer<Movie> &movie, QHBoxLayout *layout) {
+    QPushButton *movieButton = new QPushButton(this);
+    movieButton->setIconSize(QSize(150, 150));
+    connect(movieButton, &QPushButton::clicked, [this, movie]() {
+        MovieDetailWindow *movieDetailWindow = new MovieDetailWindow(movie);
+        movieDetailWindow->show();
+        this->hide();
+        connect(movieDetailWindow, &MovieDetailWindow::backToPreviousWindow, this, &CollectionWindow::show);
+    });
 
-    QLabel *movieLabel = new QLabel(QString::fromStdString(movie->getName()), this);
+    QUrl imageUrl(QString::fromStdString(movie->getPhoto()));
+    QNetworkRequest request(imageUrl);
+    QNetworkReply *reply = networkManager->get(request);
+    connect(reply, &QNetworkReply::finished, [reply, movieButton]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray imageData = reply->readAll();
+            QPixmap pixmap;
+            pixmap.loadFromData(imageData);
+            movieButton->setIcon(QIcon(pixmap));
+        } else {
+            qDebug() << "Error downloading image:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+
+    QLabel *movieTitle = new QLabel(QString::fromStdString(movie->getName()), this);
+    movieTitle->setAlignment(Qt::AlignCenter);
 
     QPushButton *deleteButton = new QPushButton("Delete", this);
     connect(deleteButton, &QPushButton::clicked, [this, movie]() {
         onDeleteMovieClicked(movie);
     });
 
-    movieLayout->addWidget(movieLabel);
+    QVBoxLayout *movieLayout = new QVBoxLayout();
+    movieLayout->addWidget(movieButton);
+    movieLayout->addWidget(movieTitle);
     movieLayout->addWidget(deleteButton);
 
-    layout->addLayout(movieLayout);
+    QWidget *movieWidget = new QWidget();
+    movieWidget->setLayout(movieLayout);
+
+    layout->addWidget(movieWidget);
 }

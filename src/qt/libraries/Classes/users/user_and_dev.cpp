@@ -15,6 +15,15 @@ AllUsers::AllUsers(std::string name, std::string login, std::string password, in
 
     _gender = strToGender(gender);
 
+    std::string query = "SELECT tconst, rating FROM user_ratings where user_id = '" + _login + "'";
+    auto buf = ExecuteSelectQuery("library", query);
+
+    std::cout << "Votes: " << '\n';
+    for (auto el: buf){
+        _all_votes[el.at("tconst")] = std::stoi(el.at("rating"));
+        std::cout << el.at("tconst") << ' ' << el.at("rating") << '\n';
+    }
+
     Logger::getInstance().logInfo("User " + _login + " has logged in.");
 }
 
@@ -116,7 +125,6 @@ void AllUsers::loadCol() {
             for (auto el: arr) tconsts.push_back(el.at("tconst"));
 
             col->loadMovies(tconsts);
-            std::cout << col->getMovies().size() << " Movies in " << col->getName() << "\n";
 
             _all_collection.push_back(col);
             counter++;
@@ -166,7 +174,6 @@ bool AllUsers::createCol(const std::string& name, const std::string& photo_url) 
 
     for (const auto& el: _all_collection){
         if (el->getName() == name){
-            std::cout << "Collection with that name already exists" << '\n';
             Logger::getInstance().logWarning("Can`t create collection with same name");
             return false;
         }
@@ -192,6 +199,7 @@ bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::strin
     std::vector<std::map<std::string, std::string>> data = {
             {{"user_id", _name}, {"tconst", movie->getTconst()}, {"comment", com}}
     };
+
     if (ExecuteInsertQuery("library", "insert", "comments", data)) {
         movie->leaveComment(_login, com);
         Logger::getInstance().logInfo(_login + " left a comment to " + movie->getName() + ".");
@@ -204,5 +212,28 @@ bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::strin
 
 void AllUsers::makeVote(const QSharedPointer<Movie>& movie, int vote, bool status, int user_rating){
     movie->updateRating(vote, status, user_rating);
+
+    if (std::find_if(_all_votes.begin(), _all_votes.end(), [tconst = movie->getTconst()] (std::pair<std::string, int> p){
+        return tconst == p.first;}) == _all_votes.end()){
+        std::vector<std::map<std::string, std::string>> data = {
+                {{"user_id", _login}, {"tconst", movie->getTconst()},
+                 {"rating", std::to_string(user_rating)}}};
+
+        ExecuteInsertQuery("library", "insert", "user_ratings", data);
+    }
+    else {
+        ExecuteUpdateQuery("library", "UPDATE user_ratings SET rating = '"+ std::to_string(user_rating) +
+                            "' WHERE tconst = '"+ movie->getTconst() +"' AND user_id = '" + _login + "';");
+    }
+
     Logger::getInstance().logInfo("Movie (" + movie->getName() + ") rating update.");
+}
+
+const std::map<std::string, int>& AllUsers::getVotes(){
+    return _all_votes;
+}
+
+bool AllUsers::checkVote(const std::string& tconst){
+    return std::find_if(_all_votes.begin(), _all_votes.end(), [tconst] (std::pair<std::string, int> p){
+        return tconst == p.first;}) != _all_votes.end();
 }

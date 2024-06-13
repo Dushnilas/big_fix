@@ -74,9 +74,11 @@ MoviesWindow::MoviesWindow(QWidget *parent)
     std::vector<QSharedPointer<Movie>> movies_no_rec;
     std::vector<QSharedPointer<Movie>> movies_cb_rec;
     std::vector<QSharedPointer<Movie>> movies_user_rec;
-    if (isLiked()) {
-        std::vector<std::string> cb_rec = GetContentRecommendations(main_user->getLogin());
-        std::vector<std::string> user_rec = GetUserRecommendations(main_user->getLogin());
+    std::vector<std::string> cb_rec = GetContentRecommendations(main_user->getLogin());
+    std::vector<std::string> user_rec = GetUserRecommendations(main_user->getLogin());
+
+    if (isLiked() and !movies_cb_rec.empty() and !movies_user_rec.empty()) {
+        std::cout << "Size:" << user_rec.size() << '\n';
         getRecommendation(movies_cb_rec, cb_rec);
         getRecommendation(movies_user_rec, user_rec);
     } else {
@@ -135,7 +137,6 @@ MoviesWindow::MoviesWindow(QWidget *parent)
         "QPushButton {"
         "    background-color: rgba(255, 255, 255, 0);"
         "    color: rgb(229, 217, 190);"
-        "    border: 1px solid rgb(229, 217, 190);"
         "    border-radius: 5px;"
         "    padding: 5px;"
         "}"
@@ -188,15 +189,6 @@ void MoviesWindow::onMovieButtonClicked(const QSharedPointer<Movie>& movie) {
 void MoviesWindow::showMoviesWindow() {
     qDebug() << "Showing MoviesWindow.";
     this->show();
-    if (movieDetailWindow) {
-        movieDetailWindow->hide();
-    }
-    if (genreWindow) {
-        genreWindow->hide();
-    }
-    if (searchWindow) {
-        searchWindow->hide();
-    }
 }
 
 void MoviesWindow::loadGenres() {
@@ -222,7 +214,7 @@ void MoviesWindow::onSearchButtonClicked() {
     if (!query.isEmpty()) {
         qDebug() << "Search query:" << query;
 
-        searchWindow = new SearchWindow(query, this);
+        searchWindow = new SearchWindow(query);
         connect(searchWindow, &SearchWindow::backToMainWindow, this, &MoviesWindow::showMoviesWindow);
         searchWindow->show();
         this->hide();
@@ -232,6 +224,7 @@ void MoviesWindow::onSearchButtonClicked() {
         qDebug() << "Search query is empty.";
     }
 }
+
 
 std::vector<std::string> MoviesWindow::fetchGenres() {
     std::vector<std::string> genres;

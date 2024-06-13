@@ -15,7 +15,7 @@
 #include <QScrollArea>
 
 MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *parent)
-        : QWidget(parent), movie(mov), closed(false), userHasRated(false), userRating(0) {
+        : QWidget(parent), movie(mov), closed(false), userHasRated(main_user->checkVote(mov->getTconst())), userRating(0) {
     movie->loadActors();
     movie->loadComments();
 
@@ -55,14 +55,12 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
     middleLayout->addWidget(movieImageLabel);
 
     QVBoxLayout *infoLayout = new QVBoxLayout();
-    std::cout << "directors " << movie->getActors()["director"].size() << '\n';
     if (!movie->getActors()["director"].empty()) {
         directorLabel = new QLabel(QString::fromStdString("Director: " + movie->getActors()["director"][0]->getName()), this);
     } else {
         directorLabel = new QLabel(QString("Director: "), this);
     }
 
-    std::cout << "Actors " << movie->getActors()["actor"].size() << '\n';
     if (!movie->getActors()["actor"].empty()) {
         QString buf = "Actors: ";
         for (auto el: movie->getActors()["actor"]) {
@@ -138,9 +136,16 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
 
     mainLayout->addLayout(addCommentLayout);
 
-    backButton = new QPushButton("Back", this);
+    backButton = new QPushButton("Back");
     connect(backButton, &QPushButton::clicked, this, &MovieDetailWindow::onBackButtonClicked);
     mainLayout->addWidget(backButton);
+
+    if (userHasRated) {
+        userRating = main_user->getVotes().at(movie->getTconst());
+        std::cout << "Rating " << userRating;
+        userRatingLabel->setText(QString("Your rating: %1").arg(userRating));
+        userRatingLabel->setVisible(true);
+    }
 
     setLayout(mainLayout);
     setWindowTitle("Movie Details");
@@ -157,7 +162,7 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
         "QPushButton {"
         "    background-color: rgba(255, 255, 255, 0);"
         "    color: rgb(229, 217, 190);"
-        "    border: 5px solid rgb(229, 217, 190);"
+        "    border: 2px solid rgb(229, 217, 190);"
         "    border-radius: 5px;"
         "    padding: 5px;"
         "}"
@@ -203,7 +208,8 @@ void MovieDetailWindow::addComment(const QString &userId, const QString &comment
 
 void MovieDetailWindow::onBackButtonClicked() {
     emit backToPreviousWindow();
-    this->deleteLater();
+    this->hide();
+    close();
 }
 
 void MovieDetailWindow::onAddToCollectionButtonClicked() {
@@ -239,6 +245,7 @@ void MovieDetailWindow::showCollectionDialog() {
             if (!main_user->addToCol(collection->getName(), movie)) {
                 QMessageBox::warning(this, "Warning", "This movie is already in the " + QString::fromStdString(collection->getName()) + " collection.");
             } else {
+                QMessageBox::information(this, "Info", "You added movie to " + QString::fromStdString(collection->getName()) + " collection.");
                 qDebug() << "Added to collection:" << QString::fromStdString(collection->getName());
             }
         });
@@ -278,6 +285,7 @@ void MovieDetailWindow::onWatchLaterButtonClicked() {
     if (!main_user->addToCol("Watch later", movie)) {
         QMessageBox::warning(this, "Warning", "This movie is already in your Watch Later collection.");
     } else {
+        QMessageBox::information(this, "Info", "You added movie to to Watch Later collection.");
         qDebug() << "Added to Watch Later";
     }
 }
@@ -286,6 +294,7 @@ void MovieDetailWindow::onLikeMovieButtonClicked() {
     if (!main_user->addToCol("Liked", movie)) {
         QMessageBox::warning(this, "Warning", "This movie is already in your Liked collection.");
     } else {
+        QMessageBox::information(this, "Info", "You added movie to to Liked collection.");
         qDebug() << "Liked the movie";
     }
 }

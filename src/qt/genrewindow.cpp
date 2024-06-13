@@ -69,8 +69,6 @@ GenreWindow::GenreWindow(const QString &genre, QWidget *parent)
         "QPushButton {"
         "    background-color: rgba(255, 255, 255, 0);"
         "    color: rgb(229, 217, 190);"
-        "    border: 5px solid rgb(229, 217, 190);"
-        "    border-radius: 5px;"
         "    padding: 5px;"
         "}"
         );
@@ -79,6 +77,7 @@ GenreWindow::GenreWindow(const QString &genre, QWidget *parent)
 
 void GenreWindow::onBackButtonClicked() {
     emit backToMoviesWindow();
+    this->hide();
     this->deleteLater();
 }
 

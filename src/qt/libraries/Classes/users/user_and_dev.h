@@ -25,6 +25,7 @@ private:
     std::string _email_address = "";
     std::string _photo_url = "";
     Gender _gender = Gender::Undefined;
+    std::map<std::string, int> _all_votes;
 
 public:
     AllUsers(std::string name, std::string login, std::string password, int age, std::string photo, const std::string& gender);
@@ -56,6 +57,8 @@ public:
 
     bool leaveComment(const QSharedPointer<Movie>& movie, const std::string& com);
     void makeVote(const QSharedPointer<Movie>& movie, int vote, bool status=true, int user_rating=0);
+    const std::map<std::string, int>& getVotes();
+    bool checkVote(const std::string& tconst);
 };
 
 #endif

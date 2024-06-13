@@ -35,6 +35,7 @@ private slots:
     void onReturnFromCollection();
     void onAddCollectionClicked();
     void onChangePhotoClicked();
+    void updateCollectionName(const QString& newName);
 
 private:
     QWidget *previousWindow;

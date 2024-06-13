@@ -13,29 +13,24 @@
 #include <QDir>
 #include "genders.h"
 #include <QComboBox>
-#include "QImageReader"
+#include <QImageReader>
 
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
         : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
 {
-
-
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
-
-
 
     main_user->loadCol();
 
     photoLabel = new QLabel(this);
-    std::cout << main_user->getPhoto() << '\n';
     QPixmap userPhoto(qFilePath(MY_PATH + main_user->getPhoto()));
     photoLabel->setPixmap(userPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     photoLabel->setFixedSize(200, 200);
     photoLabel->setStyleSheet(
-        "border: 1px solid rgba(229, 217, 190, 1);"
-        "border-radius: 10px;"
-        "background-color: rgba(0, 0, 0, 0);"
+            "border: 1px solid rgba(229, 217, 190, 1);"
+            "border-radius: 10px;"
+            "background-color: rgba(0, 0, 0, 0);"
     );
 
     userIdLabel = new QLabel(QString::fromStdString(main_user->getLogin()), this);
@@ -136,30 +131,30 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     setFixedSize(800, 600);
 
     setStyleSheet(
-        "UserProfileWindow {"
-        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
-        "    color: white;"
-        "}"
-        "QLabel {"
-        "    color: rgb(229, 217, 190);"
-        "}"
-        "QPushButton {"
-        "    background-color: rgba(255, 255, 255, 0);"
-        "    color: rgb(229, 217, 190);"
-        "    border: 1px solid rgb(229, 217, 190);"
-        "    border-radius: 5px;"
-        "    padding: 5px;"
-        "}"
-        "QScrollArea {"
-        "    background-color: rgba(255, 255, 255, 0);"
-        "    color: rgb(229, 217, 190);"
-        "    border: none;"
-        "}"
-        "QScrollArea QWidget {"
-        "    background-color: rgba(255, 255, 255, 0);"
-        "    color: rgb(229, 217, 190);"
-        "}"
-        );
+            "UserProfileWindow {"
+            "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+            "    color: white;"
+            "}"
+            "QLabel {"
+            "    color: rgb(229, 217, 190);"
+            "}"
+            "QPushButton {"
+            "    background-color: rgba(255, 255, 255, 0);"
+            "    color: rgb(229, 217, 190);"
+            "    border: 1px solid rgb(229, 217, 190);"
+            "    border-radius: 5px;"
+            "    padding: 5px;"
+            "}"
+            "QScrollArea {"
+            "    background-color: rgba(255, 255, 255, 0);"
+            "    color: rgb(229, 217, 190);"
+            "    border: none;"
+            "}"
+            "QScrollArea QWidget {"
+            "    background-color: rgba(255, 255, 255, 0);"
+            "    color: rgb(229, 217, 190);"
+            "}"
+    );
 }
 
 UserProfileWindow::~UserProfileWindow()
@@ -179,26 +174,23 @@ void UserProfileWindow::onBackButtonClicked()
 void UserProfileWindow::onCollectionClicked(const QSharedPointer<Collection>& col)
 {
     qDebug() << "Collection clicked:" << col->getName();
-   // if (collectionWindow) {
-   //     delete collectionWindow;
-   // }
-   // collectionWindow = new CollectionWindow(col, this);
-   // qDebug() << "Collection window created";
-   // connect(collectionWindow, &CollectionWindow::backToUserProfile, this, &UserProfileWindow::onReturnFromCollection);
-   // collectionWindow->show();
-   // qDebug() << "Collection window shown";
-   // this->hide();
-   // qDebug() << "User profile window hidden";
+    if (collectionWindow) {
+        delete collectionWindow;
+    }
+    collectionWindow = new CollectionWindow(col);
+    qDebug() << "Collection window created";
+    connect(collectionWindow, &CollectionWindow::backToUserProfile, this, &UserProfileWindow::onReturnFromCollection);
+    connect(collectionWindow, &CollectionWindow::collectionNameUpdated, this, &UserProfileWindow::updateCollectionName);
+    collectionWindow->show();
+    qDebug() << "Collection window shown";
+    this->hide();
+    qDebug() << "User profile window hidden";
 }
 
 void UserProfileWindow::onReturnFromCollection()
 {
     this->show();
-    if (collectionWindow) {
-        collectionWindow->hide();
-        delete collectionWindow;
-        collectionWindow = nullptr;
-    }
+    collectionWindow->hide();
 }
 
 void UserProfileWindow::onEditNameClicked()
@@ -286,7 +278,6 @@ void UserProfileWindow::onChangePhotoClicked()
     }
 }
 
-
 void UserProfileWindow::onAddCollectionClicked()
 {
     CollectionDialog dialog(this);
@@ -350,5 +341,47 @@ void UserProfileWindow::onAddCollectionClicked()
 
         QHBoxLayout *collectionsLayout = qobject_cast<QHBoxLayout*>(collectionsContainer->layout());
         collectionsLayout->addWidget(collectionWidget);
+    }
+}
+
+void UserProfileWindow::updateCollectionName(const QString& newName)
+{
+    for (auto& col : main_user->getAllCol()) {
+        if (col->getName() == newName.toStdString()) {
+            col->setName(newName.toStdString());
+            break;
+        }
+    }
+
+    // Refresh the collections display
+    QLayoutItem *child;
+    while ((child = collectionsContainer->layout()->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+
+    std::vector<QSharedPointer<Collection>> all_colls = main_user->getAllCol();
+    for (const auto& col : all_colls) {
+        QPushButton *collectionButton = new QPushButton(this);
+        collectionButton->setIcon(QIcon(qFilePath(col->getPhoto())));
+        collectionButton->setIconSize(QSize(150, 150));
+        collectionButton->setFixedSize(150, 150);
+        collectionButton->setStyleSheet("border: none;");
+        connect(collectionButton, &QPushButton::clicked, [this, col]() {
+            onCollectionClicked(col);
+        });
+
+        QVBoxLayout *collectionLayout = new QVBoxLayout();
+        collectionLayout->setAlignment(Qt::AlignCenter);
+        collectionLayout->addWidget(collectionButton);
+
+        QLabel *collectionLabel = new QLabel(QString::fromStdString(col->getName()), this);
+        collectionLabel->setAlignment(Qt::AlignCenter);
+        collectionLayout->addWidget(collectionLabel);
+
+        QWidget *collectionWidget = new QWidget();
+        collectionWidget->setLayout(collectionLayout);
+
+        collectionsContainer->layout()->addWidget(collectionWidget);
     }
 }

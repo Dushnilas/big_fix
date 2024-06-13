@@ -137,6 +137,9 @@ void Movie::updateRating(int new_vote, bool status, int user_rating) {
         _num_votes++;
     }
     else _rating = ((_rating * _num_votes) - user_rating + new_vote) / _num_votes;
+
+    ExecuteUpdateQuery("library", "UPDATE ratings SET rating = '" + std::to_string(_rating)
+                        + "', num_votes = '" + std::to_string(_num_votes) + "' WHERE tconst = '" + _tconst + "';");
 }
 
 bool compareActors(const QSharedPointer<Actor>& actor1, const QSharedPointer<Actor>& actor2) {
@@ -219,6 +222,7 @@ std::map<std::string, std::vector<QSharedPointer<Actor>>>& Movie::getActors() {
 void Movie::loadComments() {
     std::string query = "SELECT * FROM comments WHERE tconst = '" + _tconst + "'";
     std::vector<std::map<std::string, std::string>> select = ExecuteSelectQuery("library", query);
+    std::cout << "All comments " << select.size() << '\n';
 
     for (auto el: select) {
         _comments.emplace_back(el["user_id"],el["comment"]);

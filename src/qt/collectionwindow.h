@@ -11,6 +11,8 @@
 #include <QFileDialog>
 #include <QString>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QSharedPointer>
 #include <vector>
 #include "backend.h"
 
@@ -24,6 +26,7 @@ public:
 
 signals:
     void backToUserProfile();
+    void collectionNameUpdated(const QString& newName);
 
 private slots:
     void onBackButtonClicked();
@@ -33,7 +36,7 @@ private slots:
 
 private:
     void loadColMovies();
-    void addMovieToLayout(const QSharedPointer<Movie> &movie, QVBoxLayout *layout);
+    void addMovieToLayout(const QSharedPointer<Movie> &movie, QHBoxLayout *layout);
 
     QSharedPointer<Collection> collection;
     QLabel *collectionPhotoLabel;
@@ -44,7 +47,8 @@ private:
     QScrollArea *moviesArea;
     QWidget *moviesContainer;
     QPushButton *backButton;
-    QVBoxLayout *moviesLayout;
+    QHBoxLayout *moviesLayout;
+    QNetworkAccessManager *networkManager;
 };
 
 #endif // COLLECTIONWINDOW_H

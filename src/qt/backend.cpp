@@ -6,7 +6,7 @@
 #include "QString"
 
 std::vector<QSharedPointer<Movie>> all_movies;
-std::string MY_PATH = "/Users/elizabethstorozheva/Desktop/Nastya_New/big_fix/src/qt";
+std::string MY_PATH = "/Users/senya/CLionProjects/aoaoaoaooa/src/qt";
 QSharedPointer<AllUsers> main_user;
 
 QString qFilePath(const std::string& path) {
@@ -92,7 +92,6 @@ std::vector<QSharedPointer<Movie>> getMoviesSorted(int n, const std::string& gen
     std::sort(genreMovies.begin(), genreMovies.end(),[](const QSharedPointer<Movie>& a, const QSharedPointer<Movie>& b) {
         return a->getVotes() > b->getVotes(); });
 
-    std::cout << genreMovies.size() << '\n';
     if (genreMovies.size() <= n) return genreMovies;
     return {genreMovies.begin(), genreMovies.begin() + n};
 }
@@ -127,7 +126,6 @@ bool SignIn(const std::string &login, const std::string &password) {
     std::vector<std::map<std::string, std::string>> buf = ExecuteSelectQuery("library", query);
     for (const auto& el : buf) {
         if (login == el.at("user_id") && password == el.at("pass")) {
-            std::cout << el.at("name") << '\n';
             main_user = QSharedPointer<AllUsers>::create(el.at("name"), login, password, std::stoi(el.at("age")),
                 el.at("photo_url"), el.at("gender"));
             main_user->loadCol();
