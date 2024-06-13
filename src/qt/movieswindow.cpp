@@ -42,6 +42,7 @@ MoviesWindow::MoviesWindow(QWidget *parent)
 
     genresList = new QListWidget(this);
     genresList->setFixedWidth(150);
+    genresList->setStyleSheet("background-color: rgb(229, 217, 190);");
     loadGenres();
 
     userProfileButton = new QPushButton("User Profile", this);
@@ -112,9 +113,38 @@ MoviesWindow::MoviesWindow(QWidget *parent)
     setLayout(mainLayout);
     setWindowTitle("Movies Window");
 
-    // Устанавливаем начальный размер окна
-    setMinimumSize(1024, 768); // Минимальный размер окна
-    resize(1280, 720);         // Начальный размер окна
+    setStyleSheet(
+        "MoviesWindow {"
+        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "    color: white;"
+        "}"
+        "QLabel {"
+        "    color: rgb(229, 217, 190);"
+        "}"
+        "QPushButton {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: 1px solid rgb(229, 217, 190);"
+        "    border-radius: 5px;"
+        "    padding: 5px;"
+        "}"
+        "QScrollArea {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: none;"
+        "}"
+        "QScrollArea QWidget {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "}"
+        "QListWidget {"
+        "    background-color: rgb(229, 217, 190);"
+        "    color: rgb(0, 0, 0);"
+        "}"
+        );
+
+    setMinimumSize(1024, 768);
+    resize(1280, 720);
 }
 
 MoviesWindow::~MoviesWindow() {

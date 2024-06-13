@@ -27,6 +27,20 @@ SignInWindow::SignInWindow(QWidget *parent) : QWidget(parent), moviesWindow(null
     setLayout(layout);
     setWindowTitle("Sign In");
     setFixedSize(300, 180);
+
+    setStyleSheet(
+        "SignInWindow {"
+        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "    color: white;"
+        "}"
+        "QPushButton {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: 4px solid rgb(229, 217, 190);"
+        "    border-radius: 5px;"
+        "    padding: 5px;"
+        "}"
+        );
 }
 
 SignInWindow::~SignInWindow() {

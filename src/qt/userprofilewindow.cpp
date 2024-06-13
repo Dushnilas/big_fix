@@ -28,7 +28,11 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     QPixmap userPhoto(qFilePath(MY_PATH + main_user->getPhoto()));
     photoLabel->setPixmap(userPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     photoLabel->setFixedSize(200, 200);
-    photoLabel->setStyleSheet("border: 1px solid black;");
+    photoLabel->setStyleSheet(
+        "border: 1px solid rgba(229, 217, 190, 1);"
+        "border-radius: 10px;"
+        "background-color: rgba(0, 0, 0, 0);"
+    );
 
     userIdLabel = new QLabel(QString::fromStdString(main_user->getLogin()), this);
     nameLabel = new QLabel("Name: " + QString::fromStdString(main_user->getName()), this);
@@ -126,6 +130,32 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     setCentralWidget(centralWidget);
     setWindowTitle("User Profile");
     setFixedSize(800, 600);
+
+    setStyleSheet(
+        "UserProfileWindow {"
+        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "    color: white;"
+        "}"
+        "QLabel {"
+        "    color: rgb(229, 217, 190);"
+        "}"
+        "QPushButton {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: 1px solid rgb(229, 217, 190);"
+        "    border-radius: 5px;"
+        "    padding: 5px;"
+        "}"
+        "QScrollArea {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: none;"
+        "}"
+        "QScrollArea QWidget {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "}"
+        );
 }
 
 UserProfileWindow::~UserProfileWindow()
