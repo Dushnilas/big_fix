@@ -90,7 +90,7 @@ std::vector<QSharedPointer<Movie>> getMoviesSorted(int n, const std::string& gen
     }
 
     std::sort(genreMovies.begin(), genreMovies.end(),[](const QSharedPointer<Movie>& a, const QSharedPointer<Movie>& b) {
-        return a->getRating() > b->getRating(); });
+        return a->getVotes() > b->getVotes(); });
 
     std::cout << genreMovies.size() << '\n';
     if (genreMovies.size() <= n) return genreMovies;

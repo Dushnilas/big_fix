@@ -79,7 +79,7 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
     rateAndUserRatingLayout->addWidget(rateLabel);
 
     userRatingLabel = new QLabel("Your rating:", this);
-    userRatingLabel->setVisible(false); // Скрываем метку до первой оценки
+    userRatingLabel->setVisible(false);
     rateAndUserRatingLayout->addWidget(userRatingLabel);
 
     mainLayout->addLayout(rateAndUserRatingLayout);
@@ -89,7 +89,6 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
     for (int i = 10; i >= 1; --i) {
         QPushButton *ratingButton = new QPushButton(QString::number(i), this);
         connect(ratingButton, &QPushButton::clicked, [this, i]() {
-            // Обновление рейтинга пользователя
             updateUserRating(i);
             qDebug() << "User rated the film:" << i;
         });
@@ -107,7 +106,6 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
     commentsArea->setWidget(commentsContainer);
     mainLayout->addWidget(commentsArea);
 
-    // Добавим тестовые комментарии
     addComment("Great movie!", "User123");
     addComment("Really enjoyed it.", "User456");
 
@@ -127,11 +125,11 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
 
     setLayout(mainLayout);
     setWindowTitle("Movie Details");
-    setFixedSize(800, 600); // Adjust the window size as needed
+    setFixedSize(800, 600);
 }
 
 void MovieDetailWindow::onBackButtonClicked() {
-    emit backToPreviousWindow(); // Emit the signal before closing
+    emit backToPreviousWindow();
     this->deleteLater();
 }
 
@@ -150,22 +148,19 @@ void MovieDetailWindow::showCollectionDialog() {
 }
 
 void MovieDetailWindow::onWatchLaterButtonClicked() {
-    // Добавьте обработчик для добавления фильма в список "Посмотреть позже"
     qDebug() << "Added to Watch Later";
 }
 
 void MovieDetailWindow::onLikeMovieButtonClicked() {
-    // Добавьте обработчик для добавления лайка к фильму
     qDebug() << "Liked the movie";
 }
 
 void MovieDetailWindow::onAddCommentButtonClicked() {
     QString comment = commentLineEdit->text();
     if (!comment.isEmpty()) {
-        QString userId = "User123"; // Здесь вы можете получить ID пользователя из системы
+        QString userId = "User123";
         addComment(comment, userId);
         commentLineEdit->clear();
-        // Добавьте обработчик для сохранения комментария в базе данных
         qDebug() << "Added comment:" << comment;
     }
 }
