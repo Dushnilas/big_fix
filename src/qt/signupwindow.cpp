@@ -76,7 +76,7 @@ SignUpWindow::SignUpWindow(QWidget *parent)
         "QPushButton {"
         "    background-color: rgba(255, 255, 255, 0);"
         "    color: rgb(229, 217, 190);"
-        "    border: 4px solid rgb(229, 217, 190);"
+        "    border: 4px solid rgb(229, 217, 190);" //бежевый
         "    border-radius: 5px;"
         "    padding: 5px;"
         "}"

@@ -4,7 +4,15 @@
 #include <QDebug>
 
 SignInWindow::SignInWindow(QWidget *parent) : QWidget(parent), moviesWindow(nullptr) {
+
     QVBoxLayout *layout = new QVBoxLayout(this);
+
+    headtext = new QLabel("Please enter your log in details", this);
+    QFont font = headtext->font();
+    headtext->setStyleSheet("color: rgb(229, 217, 190)");
+    font.setPointSize(18);
+    font.setBold(true);
+    headtext->setFont(font);
 
     usernameField = new QLineEdit(this);
     usernameField->setPlaceholderText("Username");
@@ -19,14 +27,17 @@ SignInWindow::SignInWindow(QWidget *parent) : QWidget(parent), moviesWindow(null
     backButton = new QPushButton("Back", this);
     connect(backButton, &QPushButton::clicked, this, &SignInWindow::onBackButtonClicked);
 
-    layout->addWidget(usernameField);
-    layout->addWidget(passwordField);
-    layout->addWidget(signInButton);
-    layout->addWidget(backButton);
+
+    layout->addWidget(headtext, 1);
+    layout->addWidget(usernameField, 3);
+    layout->addWidget(passwordField, 3);
+    layout->addWidget(signInButton, 3);
+    layout->addWidget(backButton, 3);
+
 
     setLayout(layout);
     setWindowTitle("Sign In");
-    setFixedSize(300, 180);
+    setFixedSize(300, 250);
 
     setStyleSheet(
         "SignInWindow {"

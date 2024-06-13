@@ -174,6 +174,11 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
         "    background-color: rgb(229, 217, 190);"
         "    color: rgb(0, 0, 0);"
         "}"
+        "QDialog {"
+        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "    color: white;"
+        "}"
+
         );
 }
 
@@ -308,7 +313,7 @@ void MovieDetailWindow::onImageDownloaded(QNetworkReply* reply) {
         QByteArray imageData = reply->readAll();
         QPixmap pixmap;
         pixmap.loadFromData(imageData);
-        movieImageLabel->setPixmap(pixmap.scaled(200, 300, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        movieImageLabel->setPixmap(pixmap.scaled(300, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         qDebug() << "Error downloading image:" << reply->errorString();
     }

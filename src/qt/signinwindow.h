@@ -9,6 +9,7 @@
 #include <memory>
 #include "movieswindow.h"
 #include "mainwindow.h"
+#include <QLabel>
 
 class SignInWindow : public QWidget {
     Q_OBJECT
@@ -28,6 +29,7 @@ private:
     QPushButton *signInButton;
     QPushButton *backButton;
     MoviesWindow *moviesWindow;
+    QLabel *headtext;
 };
 
 #endif // SIGNINWINDOW_H

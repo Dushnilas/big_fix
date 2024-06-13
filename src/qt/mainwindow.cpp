@@ -2,8 +2,10 @@
 #include "signinwindow.h"
 #include "signupwindow.h"
 #include <QApplication>
+#include <QWidget>
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     QLabel *welcomeLabel = new QLabel("WELCOME TO MASE!", this);

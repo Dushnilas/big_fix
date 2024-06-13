@@ -17,6 +17,7 @@ std::string replaceAllOccurrences(const std::string &str, const std::string &toR
 CollectionDialog::CollectionDialog(QWidget *parent)
     : QDialog(parent), selectedImagePath(""), selectedButton(nullptr)
 {
+
     setWindowTitle("Add Collection");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
@@ -40,6 +41,7 @@ CollectionDialog::CollectionDialog(QWidget *parent)
         imageButton->setIconSize(QSize(100, 100));
         imageButton->setFixedSize(100, 100);
         imageButton->setCheckable(true);
+
 
         buttonGroup->addButton(imageButton, i);
         imagesLayout->addWidget(imageButton);
@@ -66,10 +68,11 @@ CollectionDialog::CollectionDialog(QWidget *parent)
         "QPushButton {"
         "    background-color: rgba(255, 255, 255, 0);"
         "    color: rgb(229, 217, 190);"
-        "    border: 5px solid rgb(229, 217, 190);"
+        "    border: 1px solid rgb(229, 217, 190);"
         "    border-radius: 5px;"
         "    padding: 5px;"
         "}"
+
         );
 }
 
@@ -92,6 +95,7 @@ void CollectionDialog::onImageButtonClicked(int id)
 {
     selectedImagePath = QString(qFilePath("/pictures/collection_image_%1.jpg")).arg(id);
     selectedButton = qobject_cast<QPushButton*>(buttonGroup->button(id));
+
     updateButtonStyles();
 }
 
@@ -102,9 +106,9 @@ void CollectionDialog::updateButtonStyles()
         QPushButton *pushButton = qobject_cast<QPushButton*>(button);
         if (pushButton) {
             if (pushButton == selectedButton) {
-                pushButton->setStyleSheet("border: 2px solid blue;");
+                pushButton->setStyleSheet("border: 3px solid red;");
             } else {
-                pushButton->setStyleSheet("");
+                pushButton->setStyleSheet("border: 1px solid rgb(229, 217, 190);");
             }
         }
     }

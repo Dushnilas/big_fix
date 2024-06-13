@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[])
 {
-    initializePythonInterpreter("/Users/anastasiaseraa/dev/src/qt/libraries/mysql-queries");
+    initializePythonInterpreter("/Users/elizabethstorozheva/Desktop/Nastya_New/big_fix/src/qt/libraries/mysql-queries");
 
 ////     ---------------- TEST OF DATABASE------------------
 ////     ---------------- INITIALIZING VARIABLES -------------

@@ -33,7 +33,7 @@ MoviesWindow::MoviesWindow(QWidget *parent)
     searchBar->setFixedHeight(30);
 
     searchButton = new QPushButton("Search", this);
-    connect(searchButton, &QPushButton::clicked, this, &MoviesWindow::onSearchButtonClicked);
+    connect(searchButton, &QPushButton::clicked, this, &MoviesWindow::onSearchButtonClicked); // nen
 
     topBarLayout->addWidget(logoLabel);
     topBarLayout->addWidget(searchBar);
@@ -49,12 +49,23 @@ MoviesWindow::MoviesWindow(QWidget *parent)
     connect(userProfileButton, &QPushButton::clicked, this, &MoviesWindow::onUserProfileButtonClicked);
 
     recommendedLabel = new QLabel("Recommended to watch", this);
+    QFont font = recommendedLabel->font();
+    font.setPointSize(18);
+    font.setBold(true);
+    recommendedLabel->setFont(font);
+
     moviesArea1 = new QScrollArea(this);
     moviesArea1->setWidgetResizable(true);
     moviesContainer1 = new QWidget(moviesArea1);
     QHBoxLayout *moviesLayout1 = new QHBoxLayout(moviesContainer1);
 
     otherUsersLikeLabel = new QLabel("What other users like", this);
+    QFont font2 = otherUsersLikeLabel->font();
+    font2.setPointSize(18);
+    font2.setBold(true);
+    otherUsersLikeLabel->setFont(font2);
+
+
     moviesArea2 = new QScrollArea(this);
     moviesArea2->setWidgetResizable(true);
     moviesContainer2 = new QWidget(moviesArea2);
@@ -160,7 +171,7 @@ MoviesWindow::~MoviesWindow() {
     }
 }
 
-void MoviesWindow::onUserProfileButtonClicked() {
+void MoviesWindow::onUserProfileButtonClicked() { //nen
     userProfileWindow->show();
     this->hide();
 }
@@ -208,16 +219,18 @@ void MoviesWindow::onGenreItemClicked(QListWidgetItem *item) {
 
 void MoviesWindow::onSearchButtonClicked() {
     QString query = searchBar->text();
-//    if (!query.isEmpty()) {
-//        qDebug() << "Search query:" << query;
-//        searchWindow = new SearchWindow(query, this);
-//        connect(searchWindow, &SearchWindow::backToMainWindow, this, &MoviesWindow::showMoviesWindow);
-//        searchWindow->show();
-//        qDebug() << "Search window shown";
-//        this->hide();
-//    } else {
-//        qDebug() << "Search query is empty.";
-//    }
+    if (!query.isEmpty()) {
+        qDebug() << "Search query:" << query;
+
+        searchWindow = new SearchWindow(query, this);
+        connect(searchWindow, &SearchWindow::backToMainWindow, this, &MoviesWindow::showMoviesWindow);
+        searchWindow->show();
+        this->hide();
+        qDebug() << "Search window shown";
+
+    } else {
+        qDebug() << "Search query is empty.";
+    }
 }
 
 std::vector<std::string> MoviesWindow::fetchGenres() {

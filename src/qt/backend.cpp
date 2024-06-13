@@ -6,7 +6,7 @@
 #include "QString"
 
 std::vector<QSharedPointer<Movie>> all_movies;
-std::string MY_PATH = "/Users/senya/CLionProjects/aoaoaoaooa/src/qt";
+std::string MY_PATH = "/Users/elizabethstorozheva/Desktop/Nastya_New/big_fix/src/qt";
 QSharedPointer<AllUsers> main_user;
 
 QString qFilePath(const std::string& path) {

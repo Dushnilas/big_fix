@@ -18,8 +18,12 @@
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
         : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
 {
+
+
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+
+
 
     main_user->loadCol();
 
@@ -175,16 +179,16 @@ void UserProfileWindow::onBackButtonClicked()
 void UserProfileWindow::onCollectionClicked(const QSharedPointer<Collection>& col)
 {
     qDebug() << "Collection clicked:" << col->getName();
-//    if (collectionWindow) {
-//        delete collectionWindow;
-//    }
-//    collectionWindow = new CollectionWindow(col, this);
-//    qDebug() << "Collection window created";
-//    connect(collectionWindow, &CollectionWindow::backToUserProfile, this, &UserProfileWindow::onReturnFromCollection);
-//    collectionWindow->show();
-//    qDebug() << "Collection window shown";
-//    this->hide();
-//    qDebug() << "User profile window hidden";
+   // if (collectionWindow) {
+   //     delete collectionWindow;
+   // }
+   // collectionWindow = new CollectionWindow(col, this);
+   // qDebug() << "Collection window created";
+   // connect(collectionWindow, &CollectionWindow::backToUserProfile, this, &UserProfileWindow::onReturnFromCollection);
+   // collectionWindow->show();
+   // qDebug() << "Collection window shown";
+   // this->hide();
+   // qDebug() << "User profile window hidden";
 }
 
 void UserProfileWindow::onReturnFromCollection()
