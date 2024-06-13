@@ -65,6 +65,23 @@ SignUpWindow::SignUpWindow(QWidget *parent)
 
     setLayout(layout);
 
+    setStyleSheet(
+        "SignUpWindow {"
+        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "    color: white;"
+        "}"
+        "QLabel {"
+        "    color: rgb(229, 217, 190);"
+        "}"
+        "QPushButton {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: 4px solid rgb(229, 217, 190);"
+        "    border-radius: 5px;"
+        "    padding: 5px;"
+        "}"
+        );
+
     connect(signUpButton, &QPushButton::clicked, this, &SignUpWindow::handleSignUp);
     connect(dobDateEdit, &QDateEdit::dateChanged, this, &SignUpWindow::updateAge);
 }

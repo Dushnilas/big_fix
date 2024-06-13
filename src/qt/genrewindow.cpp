@@ -24,6 +24,23 @@ GenreWindow::GenreWindow(const QString &genre, QWidget *parent) : QWidget(parent
     setLayout(mainLayout);
     setWindowTitle(QString("Films with genre: %1").arg(genre));
     setFixedSize(800, 600);
+
+    setStyleSheet(
+        "GenreWindow {"
+        "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "    color: white;"
+        "}"
+        "QLabel {"
+        "    color: rgb(229, 217, 190);"
+        "}"
+        "QPushButton {"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: 5px solid rgb(229, 217, 190);"
+        "    border-radius: 5px;"
+        "    padding: 5px;"
+        "}"
+        );
 }
 
 void GenreWindow::onBackButtonClicked() {
