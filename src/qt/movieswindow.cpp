@@ -2,6 +2,7 @@
 #include "genrewindow.h"
 #include "moviedetailwindow.h"
 #include "mysql-queries.h"
+#include "searchwindow.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -15,7 +16,8 @@
 
 #include "backend.h"
 
-MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow(new UserProfileWindow(this)), genreWindow(nullptr), movieDetailWindow(nullptr) {
+MoviesWindow::MoviesWindow(QWidget *parent)
+        : QWidget(parent), userProfileWindow(new UserProfileWindow(this)), genreWindow(nullptr), movieDetailWindow(nullptr), searchWindow(nullptr) {
     networkManager = new QNetworkAccessManager(this);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -30,8 +32,12 @@ MoviesWindow::MoviesWindow(QWidget *parent) : QWidget(parent), userProfileWindow
     searchBar->setPlaceholderText("Search...");
     searchBar->setFixedHeight(30);
 
+    searchButton = new QPushButton("Search", this);
+    connect(searchButton, &QPushButton::clicked, this, &MoviesWindow::onSearchButtonClicked);
+
     topBarLayout->addWidget(logoLabel);
     topBarLayout->addWidget(searchBar);
+    topBarLayout->addWidget(searchButton);
     mainLayout->addLayout(topBarLayout);
 
     genresList = new QListWidget(this);
@@ -119,6 +125,9 @@ MoviesWindow::~MoviesWindow() {
     if (movieDetailWindow) {
         delete movieDetailWindow;
     }
+    if (searchWindow) {
+        delete searchWindow;
+    }
 }
 
 void MoviesWindow::onUserProfileButtonClicked() {
@@ -144,6 +153,9 @@ void MoviesWindow::showMoviesWindow() {
     if (genreWindow) {
         genreWindow->hide();
     }
+    if (searchWindow) {
+        searchWindow->hide();
+    }
 }
 
 void MoviesWindow::loadGenres() {
@@ -154,7 +166,6 @@ void MoviesWindow::loadGenres() {
     connect(genresList, &QListWidget::itemClicked, this, &MoviesWindow::onGenreItemClicked);
 }
 
-
 void MoviesWindow::onGenreItemClicked(QListWidgetItem *item) {
     QString genre = item->text();
     qDebug() << "Genre clicked:" << genre;
@@ -163,6 +174,20 @@ void MoviesWindow::onGenreItemClicked(QListWidgetItem *item) {
     connect(genreWindow, &GenreWindow::backToMoviesWindow, this, &MoviesWindow::showMoviesWindow);
     genreWindow->show();
     this->hide();
+}
+
+void MoviesWindow::onSearchButtonClicked() {
+    QString query = searchBar->text();
+//    if (!query.isEmpty()) {
+//        qDebug() << "Search query:" << query;
+//        searchWindow = new SearchWindow(query, this);
+//        connect(searchWindow, &SearchWindow::backToMainWindow, this, &MoviesWindow::showMoviesWindow);
+//        searchWindow->show();
+//        qDebug() << "Search window shown";
+//        this->hide();
+//    } else {
+//        qDebug() << "Search query is empty.";
+//    }
 }
 
 std::vector<std::string> MoviesWindow::fetchGenres() {

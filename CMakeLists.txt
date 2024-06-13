@@ -40,6 +40,7 @@ add_executable(Mase_Cinema_Project
         src/qt/collectionwindow.cpp
         src/qt/libraries/Classes/users/genders.cpp
         src/qt/collectiondialog.cpp
+        src/qt/searchwindow.cpp
 )
 
 # Ensure the include directories are available

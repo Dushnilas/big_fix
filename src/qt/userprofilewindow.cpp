@@ -8,11 +8,15 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QFileDialog>
+#include <QFile>
+#include <QDir>
 #include "genders.h"
 #include <QComboBox>
+#include "QImageReader"
 
 UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
-    : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
+        : QMainWindow(parent), previousWindow(previousWindow), collectionWindow(nullptr)
 {
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
@@ -20,7 +24,8 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     main_user->loadCol();
 
     photoLabel = new QLabel(this);
-    QPixmap userPhoto(qFilePath("src/qt/pictures/user_photo.jpg"));
+    std::cout << main_user->getPhoto() << '\n';
+    QPixmap userPhoto(qFilePath(MY_PATH + main_user->getPhoto()));
     photoLabel->setPixmap(userPhoto.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     photoLabel->setFixedSize(200, 200);
     photoLabel->setStyleSheet("border: 1px solid black;");
@@ -38,6 +43,9 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     connect(editButton1, &QPushButton::clicked, this, &UserProfileWindow::onEditNameClicked);
     connect(editButton2, &QPushButton::clicked, this, &UserProfileWindow::onEditEmailClicked);
     connect(editButton3, &QPushButton::clicked, this, &UserProfileWindow::onEditGenderClicked);
+
+    changePhotoButton = new QPushButton("Change Photo", this);
+    connect(changePhotoButton, &QPushButton::clicked, this, &UserProfileWindow::onChangePhotoClicked);
 
     QHBoxLayout *nameLayout = new QHBoxLayout();
     nameLayout->addWidget(nameLabel);
@@ -79,8 +87,8 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
         collectionButton->setIconSize(QSize(150, 150));
         collectionButton->setFixedSize(150, 150);
         collectionButton->setStyleSheet("border: none;");
-        connect(collectionButton, &QPushButton::clicked, [this, collectionName = QString::fromStdString(all_colls[i]->getName())]() {
-        onCollectionClicked(collectionName);
+        connect(collectionButton, &QPushButton::clicked, [this, col = all_colls[i]]() {
+            onCollectionClicked(col);
         });
 
         QVBoxLayout *collectionLayout = new QVBoxLayout();
@@ -109,6 +117,7 @@ UserProfileWindow::UserProfileWindow(QWidget *previousWindow, QWidget *parent)
     connect(backButton, &QPushButton::clicked, this, &UserProfileWindow::onBackButtonClicked);
 
     mainLayout->addLayout(topLayout);
+    mainLayout->addWidget(changePhotoButton);
     mainLayout->addWidget(collectionsArea);
     mainLayout->addWidget(addCollectionButton);
     mainLayout->addWidget(backButton);
@@ -133,19 +142,19 @@ void UserProfileWindow::onBackButtonClicked()
     previousWindow->show();
 }
 
-void UserProfileWindow::onCollectionClicked(const QString &collectionName)
+void UserProfileWindow::onCollectionClicked(const QSharedPointer<Collection>& col)
 {
-    qDebug() << "Collection clicked:" << collectionName;
-    if (collectionWindow) {
-        delete collectionWindow;
-    }
-    collectionWindow = new CollectionWindow(collectionName, this);
-    qDebug() << "Collection window created";
-    connect(collectionWindow, &CollectionWindow::backToUserProfile, this, &UserProfileWindow::onReturnFromCollection);
-    collectionWindow->show();
-    qDebug() << "Collection window shown";
-    this->hide();
-    qDebug() << "User profile window hidden";
+    qDebug() << "Collection clicked:" << col->getName();
+//    if (collectionWindow) {
+//        delete collectionWindow;
+//    }
+//    collectionWindow = new CollectionWindow(col, this);
+//    qDebug() << "Collection window created";
+//    connect(collectionWindow, &CollectionWindow::backToUserProfile, this, &UserProfileWindow::onReturnFromCollection);
+//    collectionWindow->show();
+//    qDebug() << "Collection window shown";
+//    this->hide();
+//    qDebug() << "User profile window hidden";
 }
 
 void UserProfileWindow::onReturnFromCollection()
@@ -210,6 +219,39 @@ void UserProfileWindow::onEditGenderClicked()
     delete genderComboBox;
 }
 
+void UserProfileWindow::onChangePhotoClicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Select Photo"), "", tr("Images (*.png *.xpm *.jpg *.jpeg)"));
+    if (!filePath.isEmpty()) {
+        QFileInfo fileInfo(filePath);
+        QString fileName = fileInfo.fileName();
+
+        QString targetDir = "src/qt/pictures/";
+        QString targetPath = targetDir + fileName;
+
+        QDir dir(targetDir);
+        if (!dir.exists()) {
+            dir.mkpath(".");
+        }
+
+        QImageReader reader(filePath);
+        reader.setAutoTransform(true);
+        QImage newImage = reader.read();
+        if (newImage.isNull()) {
+            QMessageBox::warning(this, tr("Load Failed"), tr("Failed to load the image."));
+            return;
+        }
+
+        QImage scaledImage = newImage.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        if (scaledImage.save(targetPath)) {
+            photoLabel->setPixmap(QPixmap::fromImage(scaledImage));
+            main_user->setPhoto(targetPath.toStdString());
+        } else {
+            QMessageBox::warning(this, tr("Copy Failed"), tr("Failed to copy the photo to the target directory."));
+        }
+    }
+}
+
 
 void UserProfileWindow::onAddCollectionClicked()
 {
@@ -239,6 +281,14 @@ void UserProfileWindow::onAddCollectionClicked()
 
         bool create_col_status = main_user->createCol(collectionName.toStdString(), dbPath);
 
+        QSharedPointer<Collection> col;
+        for (const auto& el: main_user->getAllCol()){
+            if (collectionName.toStdString() == el->getName()) {
+                col = el;
+                break;
+            }
+        }
+
         if (!create_col_status) {
             QMessageBox::warning(this, tr("Duplicate detected"), tr("Collection with this name already exists."));
             return;
@@ -249,8 +299,8 @@ void UserProfileWindow::onAddCollectionClicked()
         collectionButton->setIconSize(QSize(150, 150));
         collectionButton->setFixedSize(150, 150);
         collectionButton->setStyleSheet("border: none;");
-        connect(collectionButton, &QPushButton::clicked, [this, collectionName]() {
-            onCollectionClicked(collectionName);
+        connect(collectionButton, &QPushButton::clicked, [this, col]() {
+            onCollectionClicked(col);
         });
 
         QVBoxLayout *collectionLayout = new QVBoxLayout();

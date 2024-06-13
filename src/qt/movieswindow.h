@@ -15,6 +15,7 @@
 #include "userprofilewindow.h"
 #include "genrewindow.h"
 #include "moviedetailwindow.h"
+#include "searchwindow.h"
 #include "backend.h"
 
 class MoviesWindow : public QWidget {
@@ -28,10 +29,12 @@ private slots:
     void onUserProfileButtonClicked();
     void onMovieButtonClicked(const QSharedPointer<Movie>& movie);
     void onGenreItemClicked(QListWidgetItem *item);
+    void onSearchButtonClicked();
     void showMoviesWindow();
 
 private:
     QLineEdit *searchBar;
+    QPushButton *searchButton;
     QPushButton *userProfileButton;
     QListWidget *genresList;
     QScrollArea *moviesArea1;
@@ -46,6 +49,7 @@ private:
 
     GenreWindow *genreWindow;
     MovieDetailWindow *movieDetailWindow;
+    SearchWindow *searchWindow;
 
     void loadGenres();
     std::vector<std::string> fetchGenres();

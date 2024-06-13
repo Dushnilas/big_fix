@@ -1,14 +1,39 @@
-//
-// Created by Senya on 13.06.2024.
-//
+#ifndef SEARCHWINDOW_H
+#define SEARCHWINDOW_H
 
-#ifndef MASE_CINEMA_PROJECT_SEARCHWINDOW_H
-#define MASE_CINEMA_PROJECT_SEARCHWINDOW_H
+#include <QWidget>
+#include <QPushButton>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QScrollArea>
+#include <QNetworkAccessManager>
+#include <vector>
+#include <memory>
+#include "backend.h"
 
+class SearchWindow : public QWidget {
+Q_OBJECT
 
-class searchwindow {
+public:
+    explicit SearchWindow(const QString &query, QWidget *parent = nullptr);
 
+signals:
+    void backToMainWindow();
+
+private slots:
+    void onBackButtonClicked();
+
+private:
+    QLabel *label;
+    QString query;
+    QPushButton *backButton;
+    QScrollArea *moviesArea;
+    QWidget *moviesContainer;
+    QNetworkAccessManager *networkManager;
+
+    void loadMoviesByQuery(const QString &query);
+    void addMovieToLayout(const QSharedPointer<Movie>& movie, QGridLayout* layout, int row, int col);
 };
 
-
-#endif //MASE_CINEMA_PROJECT_SEARCHWINDOW_H
+#endif // SEARCHWINDOW_H
