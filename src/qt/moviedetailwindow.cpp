@@ -11,10 +11,13 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QMessageBox>
+#include <QDialog>
+#include <QScrollArea>
 
 MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *parent)
         : QWidget(parent), movie(mov), closed(false), userHasRated(false), userRating(0) {
     movie->loadActors();
+    movie->loadComments();
 
     networkManager = new QNetworkAccessManager(this);
 
@@ -121,8 +124,9 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
     commentsArea->setWidget(commentsContainer);
     mainLayout->addWidget(commentsArea);
 
-    addComment("Great movie!", "User123");
-    addComment("Really enjoyed it.", "User456");
+    for (const auto& comment : movie->getComments()) {
+        addComment(QString::fromStdString(comment.first), QString::fromStdString(comment.second));
+    }
 
     QHBoxLayout *addCommentLayout = new QHBoxLayout();
     commentLineEdit = new QLineEdit(this);
@@ -143,6 +147,25 @@ MovieDetailWindow::MovieDetailWindow(const QSharedPointer<Movie>& mov, QWidget *
     setFixedSize(800, 600);
 }
 
+void MovieDetailWindow::addComment(const QString &userId, const QString &commentText) {
+    QWidget *commentWidget = new QWidget();
+    QHBoxLayout *commentLayout = new QHBoxLayout(commentWidget);
+
+    QLabel *commentLabel = new QLabel(commentText, commentWidget);
+    commentLabel->setWordWrap(true);
+
+    QLabel *userIdLabel = new QLabel(userId, commentWidget);
+    userIdLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+    commentLayout->addWidget(commentLabel);
+    commentLayout->addWidget(userIdLabel);
+
+    QVBoxLayout *commentsLayout = qobject_cast<QVBoxLayout *>(commentsArea->widget()->layout());
+    if (commentsLayout) {
+        commentsLayout->addWidget(commentWidget);
+    }
+}
+
 void MovieDetailWindow::onBackButtonClicked() {
     emit backToPreviousWindow();
     this->deleteLater();
@@ -153,14 +176,68 @@ void MovieDetailWindow::onAddToCollectionButtonClicked() {
 }
 
 void MovieDetailWindow::showCollectionDialog() {
-    bool ok;
-    QStringList collections;
-    collections << "Collection 1" << "Collection 2" << "Collection 3";
-    QString collection = QInputDialog::getItem(this, "Select Collection", "Add to collection:", collections, 0, false, &ok);
-    if (ok && !collection.isEmpty()) {
-        qDebug() << "Added to collection:" << collection;
+    std::vector<QSharedPointer<Collection>> collections = main_user->getAllCol();
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("Select Collection");
+    QVBoxLayout *dialogLayout = new QVBoxLayout(&dialog);
+
+    QScrollArea *scrollArea = new QScrollArea(&dialog);
+    scrollArea->setWidgetResizable(true);
+    QWidget *scrollAreaWidget = new QWidget();
+    QVBoxLayout *scrollAreaLayout = new QVBoxLayout(scrollAreaWidget);
+
+    for (const auto &collection : collections) {
+        QHBoxLayout *collectionLayout = new QHBoxLayout();
+
+        QLabel *collectionImageLabel = new QLabel();
+        QPixmap pixmap;
+        pixmap.load(QString::fromStdString(collection->getPhoto()));
+        collectionImageLabel->setPixmap(pixmap.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        collectionLayout->addWidget(collectionImageLabel);
+
+        QLabel *collectionNameLabel = new QLabel(QString::fromStdString(collection->getName()));
+        collectionLayout->addWidget(collectionNameLabel);
+
+        QPushButton *addButton = new QPushButton("Add");
+        connect(addButton, &QPushButton::clicked, [this, collection]() {
+            if (!main_user->addToCol(collection->getName(), movie)) {
+                QMessageBox::warning(this, "Warning", "This movie is already in the " + QString::fromStdString(collection->getName()) + " collection.");
+            } else {
+                qDebug() << "Added to collection:" << QString::fromStdString(collection->getName());
+            }
+        });
+        addButton->setStyleSheet(
+                "QPushButton {"
+                "   background-color: lightgray; "
+                "   color: black; "
+                "   border: 1px solid black; "
+                "   border-radius: 5px; "
+                "   padding: 5px;"
+                "}"
+                "QPushButton:hover {"
+                "   background-color: gray;"
+                "   color: white;"
+                "}"
+        );
+
+        collectionLayout->addWidget(addButton);
+
+        scrollAreaLayout->addLayout(collectionLayout);
     }
+
+    scrollAreaWidget->setLayout(scrollAreaLayout);
+    scrollArea->setWidget(scrollAreaWidget);
+    dialogLayout->addWidget(scrollArea);
+
+    QPushButton *closeButton = new QPushButton("Close");
+    connect(closeButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    dialogLayout->addWidget(closeButton);
+
+    dialog.setLayout(dialogLayout);
+    dialog.exec();
 }
+
 
 void MovieDetailWindow::onWatchLaterButtonClicked() {
     if (!main_user->addToCol("Watch later", movie)) {
@@ -180,13 +257,21 @@ void MovieDetailWindow::onLikeMovieButtonClicked() {
 
 void MovieDetailWindow::onAddCommentButtonClicked() {
     QString comment = commentLineEdit->text();
-    if (!comment.isEmpty()) {
-        QString userId = "User123";
-        addComment(comment, userId);
+    if (comment.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Comment cannot be empty.");
+        return;
+    }
+
+    if (main_user->leaveComment(movie, comment.toStdString())) {
+        QString userId = QString::fromStdString(main_user->getName()); // Предположим, что есть метод getUserName()
+        addComment(userId, comment);
         commentLineEdit->clear();
         qDebug() << "Added comment:" << comment;
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to add comment. Please try again.");
     }
 }
+
 
 void MovieDetailWindow::onImageDownloaded(QNetworkReply* reply) {
     if (reply->error() == QNetworkReply::NoError) {
@@ -198,25 +283,6 @@ void MovieDetailWindow::onImageDownloaded(QNetworkReply* reply) {
         qDebug() << "Error downloading image:" << reply->errorString();
     }
     reply->deleteLater();
-}
-
-void MovieDetailWindow::addComment(const QString &commentText, const QString &userId) {
-    QWidget *commentWidget = new QWidget();
-    QHBoxLayout *commentLayout = new QHBoxLayout(commentWidget);
-
-    QLabel *commentLabel = new QLabel(commentText, commentWidget);
-    commentLabel->setWordWrap(true);
-
-    QLabel *userIdLabel = new QLabel(userId, commentWidget);
-    userIdLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    commentLayout->addWidget(commentLabel);
-    commentLayout->addWidget(userIdLabel);
-
-    QVBoxLayout *commentsLayout = qobject_cast<QVBoxLayout *>(commentsArea->widget()->layout());
-    if (commentsLayout) {
-        commentsLayout->addWidget(commentWidget);
-    }
 }
 
 void MovieDetailWindow::updateUserRating(int rating) {

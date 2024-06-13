@@ -190,7 +190,7 @@ bool AllUsers::createCol(const std::string& name, const std::string& photo_url) 
 
 bool AllUsers::leaveComment(const QSharedPointer<Movie>& movie, const std::string& com) {
     std::vector<std::map<std::string, std::string>> data = {
-            {{"user_id", _login}, {"tconst", movie->getTconst()}, {"comment", com}}
+            {{"user_id", _name}, {"tconst", movie->getTconst()}, {"comment", com}}
     };
     if (ExecuteInsertQuery("library", "insert", "comments", data)) {
         movie->leaveComment(_login, com);
