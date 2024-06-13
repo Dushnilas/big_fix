@@ -263,7 +263,7 @@ void MovieDetailWindow::onAddCommentButtonClicked() {
     }
 
     if (main_user->leaveComment(movie, comment.toStdString())) {
-        QString userId = QString::fromStdString(main_user->getName()); // Предположим, что есть метод getUserName()
+        QString userId = QString::fromStdString(main_user->getName());
         addComment(userId, comment);
         commentLineEdit->clear();
         qDebug() << "Added comment:" << comment;

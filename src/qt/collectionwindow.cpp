@@ -5,7 +5,7 @@
 CollectionWindow::CollectionWindow(const QString &collectionName, QWidget *parent)
     : QWidget(parent), collectionName(collectionName)
 {
-    setWindowFlags(Qt::Window); // Ensure it's a top-level window
+    setWindowFlags(Qt::Window);
     setWindowTitle(QString("Collection: %1").arg(collectionName));
     setFixedSize(800, 600);
 

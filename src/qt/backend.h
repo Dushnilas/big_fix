@@ -30,7 +30,7 @@ void getRecommendation(std::vector<QSharedPointer<Movie>>& buf,
 
 bool compareMovies(const QSharedPointer<Movie>& m1, const QSharedPointer<Movie>& m2, const std::string& query);
 
-void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string& query, int n);
+void searchMovies(std::vector<QSharedPointer<Movie>>& result, const std::string& query, int n, const std::string& genre="");
 
 void print_select_genres(std::vector<std::pair<std::string, std::vector<std::string>>> results);
 

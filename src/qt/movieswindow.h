@@ -9,6 +9,7 @@
 #include <QScrollArea>
 #include <QLineEdit>
 #include <QLabel>
+#include <QNetworkAccessManager>
 #include <vector>
 #include <memory>
 #include "userprofilewindow.h"
@@ -17,14 +18,14 @@
 #include "backend.h"
 
 class MoviesWindow : public QWidget {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     MoviesWindow(QWidget *parent = nullptr);
     ~MoviesWindow();
 
-    private slots:
-        void onUserProfileButtonClicked();
+private slots:
+    void onUserProfileButtonClicked();
     void onMovieButtonClicked(const QSharedPointer<Movie>& movie);
     void onGenreItemClicked(QListWidgetItem *item);
     void showMoviesWindow();
@@ -41,12 +42,14 @@ private:
     QLabel *recommendedLabel;
     QLabel *otherUsersLikeLabel;
     QLabel *logoLabel;
+    QNetworkAccessManager *networkManager;
 
     GenreWindow *genreWindow;
     MovieDetailWindow *movieDetailWindow;
 
     void loadGenres();
     std::vector<std::string> fetchGenres();
+    void addMovieToLayout(const QSharedPointer<Movie>& movie, QHBoxLayout* layout);
 };
 
 #endif // MOVIESWINDOW_H
