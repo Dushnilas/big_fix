@@ -71,6 +71,8 @@ GenreWindow::GenreWindow(const QString &genre, QWidget *parent)
         "    color: rgb(229, 217, 190);"
         "    padding: 5px;"
         "}"
+
+
         );
     setFixedSize(1280, 720);
 }

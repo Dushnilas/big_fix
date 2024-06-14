@@ -78,7 +78,12 @@ CollectionWindow::CollectionWindow(const QSharedPointer<Collection>& col, QWidge
             "QPushButton {"
             "    background-color: rgba(255, 255, 255, 0);"
             "    color: rgb(229, 217, 190);"
+            "    border: 2px solid rgb(229, 217, 190);"
             "    padding: 5px;"
+            "}"
+            "QScrollArea {"
+            "    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+            "    color: white;"
             "}"
     );
     setWindowTitle("Collection: " + QString::fromStdString(collection->getName()));

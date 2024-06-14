@@ -42,7 +42,7 @@ MoviesWindow::MoviesWindow(QWidget *parent)
 
     genresList = new QListWidget(this);
     genresList->setFixedWidth(150);
-    genresList->setStyleSheet("background-color: rgb(229, 217, 190);");
+    //genresList->setStyleSheet("background-color: rgb(229, 217, 190);");
     loadGenres();
 
     userProfileButton = new QPushButton("User Profile", this);
@@ -77,7 +77,7 @@ MoviesWindow::MoviesWindow(QWidget *parent)
     std::vector<std::string> cb_rec = GetContentRecommendations(main_user->getLogin());
     std::vector<std::string> user_rec = GetUserRecommendations(main_user->getLogin());
 
-    if (isLiked() and !movies_cb_rec.empty() and !movies_user_rec.empty()) {
+    if (isLiked() and !cb_rec.empty() and !user_rec.empty()) {
         std::cout << "Size:" << user_rec.size() << '\n';
         getRecommendation(movies_cb_rec, cb_rec);
         getRecommendation(movies_user_rec, user_rec);
@@ -137,7 +137,8 @@ MoviesWindow::MoviesWindow(QWidget *parent)
         "QPushButton {"
         "    background-color: rgba(255, 255, 255, 0);"
         "    color: rgb(229, 217, 190);"
-        "    border-radius: 5px;"
+        "    border: 2px solid rgb(229, 217, 190);" //nen
+        "    border-radius: 0px;"
         "    padding: 5px;"
         "}"
         "QScrollArea {"
@@ -150,9 +151,14 @@ MoviesWindow::MoviesWindow(QWidget *parent)
         "    color: rgb(229, 217, 190);"
         "}"
         "QListWidget {"
-        "    background-color: rgb(229, 217, 190);"
-        "    color: rgb(0, 0, 0);"
+        "    background-color: rgba(255, 255, 255, 0);"
+        "    color: rgb(229, 217, 190);"
+        "    border: 2px solid rgb(229, 217, 190);" //nen
+        "    border-radius: 2px;"
         "}"
+        "QDialog {"
+        "     background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb(0, 0, 0), stop:1 rgb(19, 21, 59));"
+        "     color: white;"
         );
 
     setMinimumSize(1024, 768);

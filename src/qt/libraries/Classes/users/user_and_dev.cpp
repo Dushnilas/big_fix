@@ -217,12 +217,12 @@ void AllUsers::makeVote(const QSharedPointer<Movie>& movie, int vote, bool statu
         return tconst == p.first;}) == _all_votes.end()){
         std::vector<std::map<std::string, std::string>> data = {
                 {{"user_id", _login}, {"tconst", movie->getTconst()},
-                 {"rating", std::to_string(user_rating)}}};
+                 {"rating", std::to_string(vote)}}};
 
         ExecuteInsertQuery("library", "insert", "user_ratings", data);
     }
     else {
-        ExecuteUpdateQuery("library", "UPDATE user_ratings SET rating = '"+ std::to_string(user_rating) +
+        ExecuteUpdateQuery("library", "UPDATE user_ratings SET rating = '"+ std::to_string(vote) +
                             "' WHERE tconst = '"+ movie->getTconst() +"' AND user_id = '" + _login + "';");
     }
 
